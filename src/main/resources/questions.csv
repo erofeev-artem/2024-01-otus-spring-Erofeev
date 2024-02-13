@@ -1,0 +1,9 @@
+# Добавить сюда своих вопросов. Эту строку надо пропустить при настройке CsvToBean (withSkipLines)
+Is there life on Mars?;Science doesn't know this yet%true|Certainly. The red UFO is from Mars. And green is from Venus%false|Absolutely not%false
+How should resources be loaded form jar in Java?;ClassLoader#geResourceAsStream or ClassPathResource#getInputStream%true|ClassLoader#geResource#getFile + FileReader%false|Wingardium Leviosa%false
+Which option is a good way to handle the exception?;@SneakyThrow%false|e.printStackTrace()%false|Rethrow with wrapping in business exception (for example, QuestionReadException)%true|Ignoring exception%false
+What is the highest mountain on Earth?;Everest%true|Denali%false|Elbrus%false
+How many planets does the solar system have?;Five%false|Eight%true|Twelve%false
+What is the name of the capital of Turkey?;Canberra%false|Istanbul%false|Ankara%true
+The maximum number that can be written to int?;100000%false|2147483647%true|1024%false
+Who is the fastest animal?;Cheetah%true|Hare%false|Lion%false
