@@ -1,0 +1,9 @@
+#  ${AnsiColor.GREEN} __                                              __        ${AnsiColor.YELLOW} ______ ______
+#  ${AnsiColor.GREEN}|  |--.-----.--------.-----.--.--.--.-----.----.|  |--.    ${AnsiColor.YELLOW}|      |__    |
+#  ${AnsiColor.GREEN}|     |  _  |        |  -__|  |  |  |  _  |   _||    <     ${AnsiColor.YELLOW}|  --  |__    |
+#  ${AnsiColor.GREEN}|__|__|_____|__|__|__|_____|________|_____|__|  |__|__|    ${AnsiColor.YELLOW}|______|______|
+#
+
+  ${AnsiColor.GREEN}+-+-+-+-+-+-+ +-+-+-+-+ +-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+-+$
+  ${AnsiBackground.BRIGHT_BLACK}${AnsiColor.GREEN}|s|p|r|i|n|g| |b|o|o|t| |v|e|r|s|i|o|n| ${spring-boot.version} ${AnsiBackground.DEFAULT}
+  ${AnsiColor.GREEN}+-+-+-+-+-+-+ +-+-+-+-+ +-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+-+-+-+$
