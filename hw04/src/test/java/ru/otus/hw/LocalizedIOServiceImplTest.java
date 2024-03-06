@@ -32,9 +32,9 @@ public class LocalizedIOServiceImplTest {
     }
 
     @Test
-    void test() throws InterruptedException {
+    void printLine() throws InterruptedException {
         ioService.printLine("текст для проверки");
-        Thread.sleep(3000);
+        Thread.sleep(1000);
         assertThat(bos.toString()).isEqualTo("текст для проверки" + System.lineSeparator());
     }
 }
