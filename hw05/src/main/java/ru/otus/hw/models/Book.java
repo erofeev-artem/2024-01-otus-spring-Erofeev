@@ -17,4 +17,8 @@ public class Book {
     private Author author;
 
     private List<Genre> genres;
+
+    public boolean isEmpty() {
+        return id == 0 && title == null && author == null && genres.isEmpty();
+    }
 }
