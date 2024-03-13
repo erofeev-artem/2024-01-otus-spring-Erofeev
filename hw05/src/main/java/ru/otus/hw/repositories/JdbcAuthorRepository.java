@@ -28,7 +28,7 @@ public class JdbcAuthorRepository implements AuthorRepository {
 
     @Override
     public Optional<Author> findById(long id) {
-        return Optional.of(jdbc
+        return Optional.ofNullable(jdbc
                 .queryForObject("SELECT id, full_name FROM authors WHERE id = ?", new AuthorRowMapper(), id));
     }
 
