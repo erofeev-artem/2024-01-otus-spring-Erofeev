@@ -12,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
+@NamedEntityGraph(name = "author-genre-entity-graph",
+        attributeNodes = {@NamedAttributeNode("author"), @NamedAttributeNode("genres")})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,18 +22,15 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     private Author author;
 
-    @ManyToMany
-    @JoinColumn(name = "genres", joinColumns = @JoinColumn(name="genre_id"), inverseJoinColumns = @JoinColumn(name ='id'))
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "books_genres", joinColumns = @JoinColumn(name="book_id"),
+            inverseJoinColumns = @JoinColumn(name ="genre_id"))
     private List<Genre> genres;
 
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
-
     public boolean isEmpty() {
-        return id == 0 && title == null && author == null && genres.isEmpty() && comment == null;
+        return id == 0 && title == null && author == null && genres.isEmpty();
     }
 }

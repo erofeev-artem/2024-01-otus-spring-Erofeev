@@ -1,8 +1,10 @@
 package ru.otus.hw.commands;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.stereotype.Component;
 import ru.otus.hw.converters.BookConverter;
 import ru.otus.hw.services.BookService;
 
