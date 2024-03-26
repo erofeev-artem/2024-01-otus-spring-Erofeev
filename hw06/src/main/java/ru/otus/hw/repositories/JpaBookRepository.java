@@ -38,7 +38,6 @@ public class JpaBookRepository implements BookRepository {
         return query.getResultList();
     }
 
-    //        @Transactional
     @Override
     public Book save(Book book) {
         if (book.getId() == 0) {

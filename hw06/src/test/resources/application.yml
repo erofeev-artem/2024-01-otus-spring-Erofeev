@@ -1,6 +1,4 @@
 spring:
-  shell:
-
   datasource:
     url: jdbc:h2:mem:testdb
   sql:
@@ -15,3 +13,7 @@ spring:
       ddl-auto: none
 
     show-sql: true
+
+  shell:
+    interactive:
+      enabled: false

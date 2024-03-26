@@ -5,7 +5,6 @@ import org.springframework.shell.standard.ShellMethod;
 
 import java.sql.SQLException;
 
-
 @ShellComponent
 public class ConsoleCommands {
 

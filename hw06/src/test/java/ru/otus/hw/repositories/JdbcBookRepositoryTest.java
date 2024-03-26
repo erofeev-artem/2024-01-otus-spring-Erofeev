@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
-import ru.otus.hw.models.Comment;
 import ru.otus.hw.models.Genre;
 
 import java.util.List;
@@ -30,7 +28,6 @@ class JdbcBookRepositoryTest {
     private List<Author> dbAuthors;
 
     private List<Genre> dbGenres;
-    private List<Comment> dbComments;
 
     private List<Book> dbBooks;
 
@@ -38,11 +35,10 @@ class JdbcBookRepositoryTest {
     void setUp() {
         dbAuthors = getDbAuthors();
         dbGenres = getDbGenres();
-        dbComments = getComments();
         dbBooks = getDbBooks(dbAuthors, dbGenres);
     }
 
-    @DisplayName("должен загружать книгу по id")
+    @DisplayName("Должен загружать книгу по id")
     @ParameterizedTest
     @MethodSource("getDbBooks")
     void shouldReturnCorrectBookById(Book expectedBook) {
@@ -53,7 +49,7 @@ class JdbcBookRepositoryTest {
                 .isEqualTo(expectedBook);
     }
 
-    @DisplayName("должен загружать список всех книг")
+    @DisplayName("Должен загружать список всех книг")
     @Test
     void shouldReturnCorrectBooksList() {
         var actualBooks = repositoryJpa.findAll();
@@ -62,7 +58,7 @@ class JdbcBookRepositoryTest {
         actualBooks.forEach(System.out::println);
     }
 
-    @DisplayName("должен сохранять новую книгу")
+    @DisplayName("Должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
         var expectedBook = new Book(0, "BookTitle_10500", dbAuthors.get(0),
@@ -73,7 +69,7 @@ class JdbcBookRepositoryTest {
                 .isEqualTo(expectedBook);
     }
 
-    @DisplayName("должен сохранять измененную книгу")
+    @DisplayName("Должен сохранять измененную книгу")
     @Test
     void shouldSaveUpdatedBook() {
         var expectedBook = new Book(1L, "BookTitle_10500", dbAuthors.get(2),
@@ -87,7 +83,7 @@ class JdbcBookRepositoryTest {
                 .isEqualTo(expectedBook);
     }
 
-    @DisplayName("должен удалять книгу по id ")
+    @DisplayName("Должен удалять книгу по id ")
     @Test
     void shouldDeleteBook() {
         assertThat(repositoryJpa.findById(1L)).isPresent();
@@ -104,12 +100,6 @@ class JdbcBookRepositoryTest {
     private static List<Genre> getDbGenres() {
         return IntStream.range(1, 7).boxed()
                 .map(id -> new Genre(id, "Genre_" + id))
-                .toList();
-    }
-
-    private static List<Comment> getComments() {
-        return IntStream.range(1, 4).boxed()
-                .map(id -> new Comment(id, "Comment_" + id, getDbBooks().get(id - 1)))
                 .toList();
     }
 

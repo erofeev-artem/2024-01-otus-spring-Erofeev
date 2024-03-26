@@ -16,6 +16,7 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
+
     private final BookRepository bookRepository;
 
     @Override
@@ -32,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public Comment save(long id, String text, long bookId){
+    public Comment save(long id, String text, long bookId) {
         Book book = bookRepository.findById(bookId).get();
         Comment comment = new Comment(id, text, book);
         return commentRepository.save(comment);
@@ -40,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteById(long id){
+    public void deleteById(long id) {
         commentRepository.deleteById(id);
     }
 }

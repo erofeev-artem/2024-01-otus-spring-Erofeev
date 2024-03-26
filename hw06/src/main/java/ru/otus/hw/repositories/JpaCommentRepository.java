@@ -5,7 +5,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 
 import java.util.List;
@@ -13,10 +12,11 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class JpaCommentRepository implements CommentRepository{
+public class JpaCommentRepository implements CommentRepository {
 
     @PersistenceContext
     private final EntityManager em;
+
     @Override
     public Optional<Comment> findById(long id) {
         return Optional.ofNullable(em.find(Comment.class, id));
