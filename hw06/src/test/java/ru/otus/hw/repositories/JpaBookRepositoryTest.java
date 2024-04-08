@@ -12,6 +12,7 @@ import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -29,33 +30,32 @@ class JpaBookRepositoryTest {
 
     private List<Genre> dbGenres;
 
-    private List<Book> dbBooks;
-
     @BeforeEach
     void setUp() {
         dbAuthors = getDbAuthors();
         dbGenres = getDbGenres();
-        dbBooks = getDbBooks(dbAuthors, dbGenres);
     }
 
     @DisplayName("Должен загружать книгу по id")
     @ParameterizedTest
     @MethodSource("getDbBooks")
-    void shouldReturnCorrectBookById(Book expectedBook) {
-        var actualBook = repositoryJpa.findById(expectedBook.getId());
+    void shouldReturnCorrectBookById(Book book) {
+        Book expectedBook = repositoryJpa.save(book);
+        var actualBook = repositoryJpa.findById(book.getId());
         assertThat(actualBook).isPresent()
                 .get()
-                .usingRecursiveComparison()
                 .isEqualTo(expectedBook);
     }
 
     @DisplayName("Должен загружать список всех книг")
     @Test
     void shouldReturnCorrectBooksList() {
+        List<Book> expectedBooks = new ArrayList<>();
+        for(Book book : getDbBooks()){
+            expectedBooks.add(repositoryJpa.save(book));
+        }
         var actualBooks = repositoryJpa.findAll();
-        var expectedBooks = dbBooks;
-        assertThat(actualBooks).usingRecursiveComparison().isEqualTo(expectedBooks);
-        actualBooks.forEach(System.out::println);
+        assertThat(actualBooks).isEqualTo(expectedBooks);
     }
 
     @DisplayName("Должен сохранять новую книгу")

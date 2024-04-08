@@ -4,13 +4,13 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.hw.models.Comment;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class JpaCommentRepository implements CommentRepository {
 
@@ -23,9 +23,8 @@ public class JpaCommentRepository implements CommentRepository {
     }
 
     @Override
-    public List<Comment> findByBookId(long id) {
-        TypedQuery<Comment> query = em.createQuery("select a from Comment a where a.book.id = :id", Comment.class);
-        query.setParameter("id", id);
+    public List<Comment> findAll() {
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c", Comment.class);
         return query.getResultList();
     }
 

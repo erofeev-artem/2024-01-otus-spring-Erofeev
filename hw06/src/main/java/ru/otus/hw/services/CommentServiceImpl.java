@@ -8,6 +8,7 @@ import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +28,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Comment> findByBookId(long id) {
-        return commentRepository.findByBookId(id);
+    public List<Comment> findByBookId(long bookId) {
+        List<Comment> comments = new ArrayList<>();
+        Book book = bookRepository.findById(bookId).get();
+        for (Comment comment : book.getComments()) {
+            long id = comment.getId();
+            Optional<Comment> optionalById = commentRepository.findById(id);
+            optionalById.ifPresent(comments::add);
+        }
+        return comments;
     }
 
     @Override

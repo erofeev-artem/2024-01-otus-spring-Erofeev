@@ -1,4 +1,4 @@
-package ru.otus.hw.repositories;
+package ru.otus.hw.commands;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.commands.BookCommands;
 import ru.otus.hw.converters.BookConverter;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;

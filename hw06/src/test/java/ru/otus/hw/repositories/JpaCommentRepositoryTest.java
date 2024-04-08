@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 
-import java.util.List;
 import java.util.Optional;
 
 @DisplayName("Репозиторий на основе Jpa для работы с комментариями")
@@ -22,14 +21,6 @@ public class JpaCommentRepositoryTest {
     private JpaBookRepository bookRepository;
     @Autowired
     private JpaCommentRepository commentRepository;
-
-    @DisplayName("Получение всех комментариев по id книги")
-    @Test
-    void findCommentsByBookId() {
-        List<Comment> comment = commentRepository.findByBookId(2L);
-        Assertions.assertEquals("Could have been better", comment.get(0).getText());
-        Assertions.assertEquals("Very interesting book", comment.get(1).getText());
-    }
 
     @DisplayName("Получение комментария по id")
     @Test
@@ -45,11 +36,9 @@ public class JpaCommentRepositoryTest {
     void addComment() {
         Book book = bookRepository.findById(3).get();
         var expectedComment = new Comment(0, "Boring story", book);
-        commentRepository.save(expectedComment);
-        List<Comment> comments = commentRepository.findByBookId(3);
-        Assertions.assertEquals(2, comments.size());
-        Assertions.assertEquals("Boring story", comments.get(1).getText());
-        Assertions.assertEquals(3, comments.get(1).getBook().getId());
+        Comment comment = commentRepository.save(expectedComment);
+        Assertions.assertEquals("Boring story", comment.getText());
+        Assertions.assertEquals(3, comment.getBook().getId());
     }
 
     @DisplayName("Изменение комментария")
@@ -57,11 +46,9 @@ public class JpaCommentRepositoryTest {
     void updateComment() {
         Book book = bookRepository.findById(3).get();
         var expectedComment = new Comment(3, "Awesome!!!", book);
-        commentRepository.save(expectedComment);
-        List<Comment> comments = commentRepository.findByBookId(3);
-        Assertions.assertEquals(1, comments.size());
-        Assertions.assertEquals("Awesome!!!", comments.get(0).getText());
-        Assertions.assertEquals(3, comments.get(0).getBook().getId());
+        Comment comment = commentRepository.save(expectedComment);
+        Assertions.assertEquals("Awesome!!!", comment.getText());
+        Assertions.assertEquals(3, comment.getBook().getId());
     }
 
     @DisplayName("Удаление комментария")

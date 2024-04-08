@@ -4,13 +4,13 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.hw.models.Genre;
 
 import java.util.List;
 import java.util.Set;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class JpaGenreRepository implements GenreRepository {
 
@@ -19,13 +19,13 @@ public class JpaGenreRepository implements GenreRepository {
 
     @Override
     public List<Genre> findAll() {
-        TypedQuery<Genre> query = em.createQuery("select a from Genre a", Genre.class);
+        TypedQuery<Genre> query = em.createQuery("select g from Genre g", Genre.class);
         return query.getResultList();
     }
 
     @Override
     public List<Genre> findAllByIds(Set<Long> ids) {
-        TypedQuery<Genre> query = em.createQuery("select a from Genre a where id in (:ids)", Genre.class);
+        TypedQuery<Genre> query = em.createQuery("select g from Genre g where id in (:ids)", Genre.class);
         query.setParameter("ids", ids);
         return query.getResultList();
     }
