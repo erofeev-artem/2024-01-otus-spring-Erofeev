@@ -14,6 +14,8 @@ import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
+import java.util.List;
+
 
 @ChangeLog
 public class DatabaseChangelog {
@@ -26,42 +28,31 @@ public class DatabaseChangelog {
 //        db.drop();
 //    }
 
-    @ChangeSet(order = "001", id = "insertAuthor_1", author = "aerofeev")
-    public void insertAuthor1(AuthorRepository repository) {
+    @ChangeSet(order = "001", id = "insertAuthors", author = "aerofeev")
+    public void insertAuthors(AuthorRepository repository) {
         repository.save(new Author("Author_1"));
-    }
-
-    @ChangeSet(order = "002", id = "insertAuthor_2", author = "aerofeev")
-    public void insertAuthor2(AuthorRepository repository) {
         repository.save(new Author("Author_2"));
-    }
-
-    @ChangeSet(order = "003", id = "insertAuthor_3", author = "aerofeev")
-    public void insertAuthor3(AuthorRepository repository) {
         repository.save(new Author("Author_3"));
     }
 
-    @ChangeSet(order = "004", id = "insertGenre_1", author = "aerofeev")
-    public void insertGenre1(GenreRepository repository) {
+    @ChangeSet(order = "002", id = "insertGenres", author = "aerofeev")
+    public void insertGenres(GenreRepository repository) {
         repository.save(new Genre("Genre_1"));
-    }
-
-    @ChangeSet(order = "005", id = "insertGenre_2", author = "aerofeev")
-    public void insertGenre2(GenreRepository repository) {
         repository.save(new Genre("Genre_2"));
-    }
-
-    @ChangeSet(order = "006", id = "insertGenre_3", author = "aerofeev")
-    public void insertGenre3(GenreRepository repository) {
         repository.save(new Genre("Genre_3"));
     }
 
-    @ChangeSet(order = "007", id = "insertBook_1", author = "aerofeev")
-    public void insertBook1(BookRepository repository) {
-
-        repository.save(new Book("Pushkin", a));
+    @ChangeSet(order = "003", id = "insertBooks", author = "aerofeev")
+    public void insertBook1(BookRepository bookRepository, AuthorRepository authorRepository,
+                            GenreRepository genreRepository) {
+        List<Genre> allGenres = genreRepository.findAll();
+        List<Author> allAuthors = authorRepository.findAll();
+        bookRepository.save(new Book("Fahrenheit 451", allAuthors.get(0), List.of(allGenres.get(0),
+                allGenres.get(2))));
+        bookRepository.save(new Book("Atlas shrugged", allAuthors.get(1), List.of(allGenres.get(2))));
+        bookRepository.save(new Book("Starship troopers", allAuthors.get(2), List.of(allGenres.get(2),
+                allGenres.get(3))));
     }
-
 
 
     @ChangeSet(order = "00", id = "insertComment_1", author = "aerofeev")
