@@ -52,10 +52,4 @@ public class DatabaseChangelog {
         bookRepository.save(new Book("Starship troopers", allAuthors.get(2), List.of(allGenres.get(0),
                 allGenres.get(2))));
     }
-
-
-//    @ChangeSet(order = "00", id = "insertComment_1", author = "aerofeev")
-//    public void insertComment1(CommentRepository repository) {
-//        repository.save(new Comment("Pushkin"));
-//    }
 }

@@ -5,14 +5,14 @@ spring:
       database: book_test
       port: 0
 
-#  shell:
-#    interactive:
-#      enabled: true
-#    noninteractive:
-#      enabled: false
-#    command:
-#      version:
-#        enabled: false
+  shell:
+    interactive:
+      enabled: false
+    noninteractive:
+      enabled: false
+    command:
+      version:
+        enabled: false
 
 de:
   flapdoodle:
