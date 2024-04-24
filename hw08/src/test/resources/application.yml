@@ -23,7 +23,7 @@ de:
 mongock:
   runner-type: ApplicationRunner
   change-logs-scan-package:
-    - ru.otus.hw.mongock.changelog
+    - ru.otus.hw.hw08new.mongock.changelog
   mongo-db:
     write-concern:
       journal: false
