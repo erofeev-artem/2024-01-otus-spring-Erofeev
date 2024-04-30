@@ -1,6 +1,6 @@
 spring:
   application:
-    name: hw08new
+    name: hw08
   data:
     mongodb:
       host: localhost
@@ -25,7 +25,7 @@ de:
 mongock:
   runner-type: "InitializingBean"
   change-logs-scan-package:
-    - ru.otus.hw.hw08new.mongock.changelog
+    - ru.otus.hw.mongock.changelog
   mongo-db:
     write-concern:
       journal: false
