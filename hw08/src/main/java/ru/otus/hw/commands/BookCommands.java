@@ -39,23 +39,14 @@ public class BookCommands {
                 .orElse("Book with title %s not found".formatted(title));
     }
 
-    // bins newBook 1 1,6
-    @ShellMethod(value = "Insert book", key = "bins")
-    public String insertBook(String title, String authorId, Set<String> genresId) {
-        var savedBook = bookService.insert(title, authorId, genresId);
+    @ShellMethod(value = "Save book", key = "bins")
+    public String saveBook(String title, String authorFullName, Set<String> genresNames) {
+        var savedBook = bookService.saveOrUpdate(title, authorFullName, genresNames);
         return bookConverter.bookToString(savedBook);
     }
 
-    // bupd 4 editedBook 3 2,5
-    @ShellMethod(value = "Update book", key = "bupd")
-    public String updateBook(String id, String title, String authorId, Set<String> genresId) {
-        var savedBook = bookService.update(id, title, authorId, genresId);
-        return bookConverter.bookToString(savedBook);
-    }
-
-    // bdel 4
-    @ShellMethod(value = "Delete book by id", key = "bdel")
-    public void deleteBook(String id) {
-        bookService.deleteById(id);
+    @ShellMethod(value = "Delete book by title", key = "bdel")
+    public void deleteBook(String title) {
+        bookService.deleteByTitle(title);
     }
 }

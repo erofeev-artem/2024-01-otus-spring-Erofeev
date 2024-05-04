@@ -11,5 +11,9 @@ public interface BookRepository extends MongoRepository<Book, String> {
 
     Optional<Book> findByTitle(String title);
 
+    void deleteBookByTitle(String title);
+
+    void removeCommentArrayElementById(String id);
+
     List<Book> findAll();
 }

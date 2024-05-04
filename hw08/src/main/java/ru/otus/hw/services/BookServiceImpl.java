@@ -2,18 +2,18 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.exceptions.DocumentNotFoundException;
+import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
+import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
-
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static org.springframework.util.ObjectUtils.isEmpty;
 
 @RequiredArgsConstructor
 @Service
@@ -40,31 +40,23 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book insert(String title, String authorId, Set<String> genresId) {
-        return save(title, authorId, genresId);
-    }
-
-    @Override
-    public Book update(String id, String title, String authorId, Set<String> genresId) {
-        return save(title, authorId, genresId);
-    }
-
-    @Override
-    public void deleteById(String id) {
-        bookRepository.deleteById(id);
-    }
-
-    private Book save(String title, String authorId, Set<String> genresId) {
-        if (isEmpty(genresId)) {
-            throw new IllegalArgumentException("Genres ids must not be null");
+    public Book saveOrUpdate(String title, String authorFullName, Set<String> genresNames) {
+        Book book = bookRepository.findByTitle(title).orElse(new Book());
+        book.setTitle(title);
+        Author author = authorRepository.findByFullName(authorFullName).orElseThrow(() ->
+                new DocumentNotFoundException(String.format("Author with full name %s not found", authorFullName)));
+        book.setAuthor(author);
+        Set<Genre> newGenres = new HashSet<>();
+        for (String genreName : genresNames) {
+            newGenres.add(genreRepository.findByName(genreName).orElseThrow(() ->
+                    new DocumentNotFoundException(String.format("Genre with name %s not found", genreName))));
         }
-        var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new EntityNotFoundException("Author with id %s not found".formatted(authorId)));
-        var genres = genreRepository.findAllById(genresId);
-        if (isEmpty(genres) || genresId.size() != genres.size()) {
-            throw new EntityNotFoundException("One or all genres with ids %s not found".formatted(genresId));
-        }
-        var book = new Book(null, title, author, genres);
+        book.setGenres(newGenres);
         return bookRepository.save(book);
+    }
+
+    @Override
+    public void deleteByTitle(String title) {
+        bookRepository.deleteBookByTitle(title);
     }
 }
