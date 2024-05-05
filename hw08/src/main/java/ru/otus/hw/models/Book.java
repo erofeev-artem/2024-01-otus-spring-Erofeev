@@ -7,7 +7,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Document
 @Data
@@ -23,11 +25,15 @@ public class Book {
     private Author author;
 
     @DBRef
-    private List<Genre> genres;
+    private Set<Genre> genres;
 
-    public Book(String title, Author author, List<Genre> genres) {
+    @DBRef
+    private List<Comment> comments;
+
+    public Book(String title, Author author, Set<Genre> genres, Comment... comments) {
         this.title = title;
         this.author = author;
         this.genres = genres;
+        this.comments = Arrays.asList(comments);
     }
 }

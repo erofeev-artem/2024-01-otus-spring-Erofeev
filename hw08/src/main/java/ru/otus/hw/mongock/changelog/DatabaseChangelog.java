@@ -9,9 +9,11 @@ import ru.otus.hw.models.Comment;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
+import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.List;
+import java.util.Set;
 
 @ChangeLog(order = "001")
 public class DatabaseChangelog {
@@ -38,15 +40,27 @@ public class DatabaseChangelog {
         repository.save(new Genre("Genre_3"));
     }
 
-    @ChangeSet(order = "004", id = "insertBooks", author = "aerofeev")
+    @ChangeSet(order = "004", id = "insertComments", author = "aerofeev")
+    public void insertComments(CommentRepository repository, BookRepository bookRepository) {
+
+        repository.save(new Comment("Not bad", bookRepository.findByTitle("Fahrenheit 451").get()));
+        repository.save(new Comment("Awesome", bookRepository.findByTitle("Fahrenheit 451").get()));
+        repository.save(new Comment("Very boring", bookRepository.findByTitle("Fahrenheit 451").get()));
+
+        1 коммент к 1 книге
+    }
+
+    @ChangeSet(order = "005", id = "insertBooks", author = "aerofeev")
     public void insertBooks(BookRepository bookRepository, AuthorRepository authorRepository,
-                            GenreRepository genreRepository) {
+                            GenreRepository genreRepository, CommentRepository commentRepository) {
         List<Genre> allGenres = genreRepository.findAll();
         List<Author> allAuthors = authorRepository.findAll();
-        bookRepository.save(new Book("Fahrenheit 451", allAuthors.get(0), List.of(allGenres.get(0),
-                allGenres.get(2))));
-        bookRepository.save(new Book("Atlas shrugged", allAuthors.get(1), List.of(allGenres.get(2))));
-        bookRepository.save(new Book("Starship troopers", allAuthors.get(2), List.of(allGenres.get(0),
-                allGenres.get(2))));
+        List<Comment> comments = commentRepository.findAll();
+        bookRepository.save(new Book("Fahrenheit 451", allAuthors.get(0), Set.of(allGenres.get(0),
+                allGenres.get(2)), comments.get(0), comments.get(1)));
+        bookRepository.save(new Book("Atlas shrugged", allAuthors.get(1),
+                Set.of(allGenres.get(2)), comments.get(0), comments.get(1), comments.get(2)));
+        bookRepository.save(new Book("Starship troopers", allAuthors.get(2), Set.of(allGenres.get(0),
+                allGenres.get(2)), comments.get(1)));
     }
 }
