@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.otus.hw.models.Book;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,12 +23,5 @@ public class BookConverter {
                 book.getTitle(),
                 authorConverter.authorToString(book.getAuthor()),
                 genresString);
-    }
-
-    public List<Book> stringToBooks(String books) {
-        String[] splitBooks = books.split("],");
-        List<String> strings = Arrays.stream(splitBooks).map(b -> b.replaceAll("\n", "")).collect(Collectors.toList());
-
-        return null;
     }
 }

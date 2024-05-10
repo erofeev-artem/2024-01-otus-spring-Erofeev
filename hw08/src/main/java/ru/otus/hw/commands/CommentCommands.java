@@ -20,7 +20,7 @@ public class CommentCommands {
     public String findCommentById(String id) {
         return commentService.findById(id)
                 .map(commentConverter::commentToString)
-                .orElse("Comment with id %d not found".formatted(id));
+                .orElse("Comment with id %s not found".formatted(id));
     }
 
     @ShellMethod(value = "Find comment by book title", key = "cbbt")
@@ -38,8 +38,8 @@ public class CommentCommands {
     }
 
     @ShellMethod(value = "Update comment", key = "cupd")
-    public String updateComment(long id, String text, String bookTitle) {
-        Comment comment = commentService.save(text, bookTitle);
+    public String updateComment(String id, String text) {
+        Comment comment = commentService.update(id, text);
         return commentConverter.commentToString(comment);
     }
 

@@ -24,23 +24,26 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> findByBookTitle(String title) {
-        var book = bookRepository.findByTitle(title).orElseThrow(() -> new DocumentNotFoundException(
-                String.format("Book with title %s not found", title)));
-        return book.getComments();
+    public List<Comment> findByBookTitle(String bookTitle) {
+        Book book = bookRepository.findByTitle(bookTitle).orElseThrow(() -> new DocumentNotFoundException(
+                String.format("Book with title %s not found", bookTitle)));
+        ;
+        return commentRepository.findByBookId(book.getId());
     }
 
     @Override
     public Comment save(String text, String bookTitle) {
         Book book = bookRepository.findByTitle(bookTitle).orElseThrow(() -> new DocumentNotFoundException(
                 String.format("Book with title %s not found", bookTitle)));
-        Comment comment = new Comment(text);
-        List<Comment> comments = book.getComments();
-        comments.add(comment);
-        commentRepository.save(comment);
-        book.setComments(comments);
-        bookRepository.save(book);
-        return comment;
+        return commentRepository.save(new Comment(text, book));
+    }
+
+    @Override
+    public Comment update(String id, String text) {
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new DocumentNotFoundException(
+                String.format("Comment with id %s not found", id)));
+        comment.setText(text);
+        return commentRepository.save(comment);
     }
 
     @Override
