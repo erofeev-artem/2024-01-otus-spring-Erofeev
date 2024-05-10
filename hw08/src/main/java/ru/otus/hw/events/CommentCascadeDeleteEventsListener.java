@@ -15,6 +15,7 @@ import ru.otus.hw.repositories.CommentRepository;
 public class CommentCascadeDeleteEventsListener extends AbstractMongoEventListener<Book> {
 
     private final BookRepository bookRepository;
+
     private final CommentRepository commentRepository;
 
     @Override
