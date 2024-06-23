@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Info</title>
+    <style type="text/css">
+
+.body {
+padding: 50px;
+background-color: gray;
+}
+
+.comment-block {
+background-color: #b8b4b4;
+}
+
+.comment-name{
+    margin-top: 4px;
+    margin-bottom: 2px;
+    margin-left: 4px;
+    width: 900px;
+}
+
+.input-id {
+margin-top: 4px;
+width: 292px;
+margin-left: 31px;
+}
+
+.input-title {
+width: 292px;
+margin-left: 15px;
+}
+
+.input-author {
+width: 292px;
+margin-left: 4px;
+}
+
+.input-genre{
+width: 292px;
+margin-left: 54px;
+}
+
+.label{
+width: 300px;
+}
+
+.row {
+margin-top: 10px;
+margin-bottom: 10px;
+}
+
+.radius{
+border: 2px solid;
+border-radius: 1px;
+}
+
+.errors {
+color: red;
+}
+
+.info-block{
+background-color: #e0dcdc
+}
+
+.comment-info{
+display:inline-block;
+}
+
+.back-button{
+margin-left: 309px;
+}
+
+
+    </style>
+
+</head>
+<body>
+<h1>Book info</h1>
+<form id="info-form" action="info.html" th:action="@{/book/info(id=${book.id})}" th:method="post" th:object="${book}">
+    <div class="info-block">
+        <div class="row">
+            <label for="id-input">Id:</label>
+            <th bgcolor="#524342"></th>
+            <input id="id-input" class="input-id" type="text" readonly="readonly" th:value="*{id}"/>
+        </div>
+
+        <div class="row">
+            <label for="book-title-input">Title:</label>
+            <input id="book-title-input" class="input-title" name="title" type="text" readonly="readonly"
+                   th:value="*{title}"/>
+            <div class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Wrong book title error</div>
+        </div>
+
+        <div class="row">
+            <label for="book-author-input">Author</label>
+            <input id="book-author-input" class="input-author" name="authorFullName" readonly="readonly" type="text"
+                   th:value="*{author.fullName}"/>
+        </div>
+
+        <div class="row">
+            <label for="book-genre-input">Genres:</label>
+            <th:block th:each="genre: ${book.getGenres}">
+                <div>
+                    <input id="book-genre-input" class="input-genre" readonly="readonly" th:name="genreName"
+                           th:value="${genre.name}"/>
+                </div>
+            </th:block>
+        </div>
+        <div class="row">
+            <a href="list.html" th:href="@{/book/all}">
+                <button type="button" class="back-button" th:text="Back"></button>
+            </a>
+        </div>
+        <div>
+            <td>
+                <a href="createComment.html" th:href="@{/comment/add(bookId=${book.id})}">
+                    <button type="button" style="width: auto">Add new comment</button>
+                </a>
+            </td>
+        </div>
+    </div>
+
+    <label for="book-comment-input">Comments:</label>
+    <div class="comment-block">
+        <div class="row">
+            <th:block th:each="comment: ${comments}">
+                <div class="comment-info">
+                    <input id="book-comment-input" class="comment-name radius" readonly="readonly" th:name="comment"
+                           th:value="${comment.text}"/>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</form>
+</body>
+</html>

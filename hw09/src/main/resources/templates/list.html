@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all books</title>
+    <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+.table {
+border: 1px solid black;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.thead th:nth-child(1) {
+  width: 30%;
+}
+
+.thead th:nth-child(2) {
+  width: 20%;
+}
+
+.thead th:nth-child(3) {
+  width: 15%;
+}
+
+.thead th:nth-child(4) {
+  width: 35%;
+}
+
+th,
+td {
+  padding: 20px;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #b8b4b4;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #e0dcdc;
+}
+
+.edit-button{
+width: 50px;
+margin-right: 20px;
+}
+
+.delete-button{
+
+}
+
+.inter {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0;
+}
+
+.manrope {
+  font-family: "Manrope", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+    </style>
+
+</head>
+<h2>Books:</h2>
+
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col" class="inter">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Genres</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td class="manrope" th:text="${book.id}">Id</td>
+            <td><a th:href="@{/book/info(id=${book.id})}" th:text="${book.title}">Title</a></td>
+            <td th:text="${book.author.fullName}">Author</td>
+            <td>
+                <span th:each="genre: ${book.genres}"><span th:text="${genre.name}+', '"></span></span>
+            </td>
+            <td>
+                <a href="edit.html" th:href="@{/book/edit(id=${book.id})}">
+                    <button type="button" class="edit-button">Edit</button>
+                </a>
+                <a type="submit" th:href="@{/book/delete(id=${book.id})}">
+                    <button type="button" class="delete-button">Delete</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <td>
+        <a href="create.html" th:href="@{/book/create}">
+            <button type="button" style="width: auto">Add new book</button>
+        </a>
+    </td>
+</div>
+</body>
+</html>

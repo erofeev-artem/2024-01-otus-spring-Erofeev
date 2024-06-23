@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>New comment</title>
+    <style>
+
+.row{
+display:inline-block;
+background-color: #e0dcdc;
+}
+
+.button{
+border: 2px solid;
+border-radius: 1px;
+margin-left: 20px;
+}
+
+.input-text{
+width: 900px;
+}
+
+    </style>
+</head>
+<body>
+<h1>New comment</h1>
+<form id="create-form" action="createComment.html" th:action="@{/comment/add}" th:method="post">
+
+    <div class="row">
+        <label for="comment-text-input">Text:</label>
+        <input id="comment-text-input" class="input-text" name="commentText" type="text"/>
+
+        <form th:action="@{/comment/add}">
+            <button type="submit" class="button" th:name="bookId" th:value="${bookId}">Save</button>
+        </form>
+
+        <a href="info.html" th:href="@{/book/info(id=${bookId})}">
+            <button type="button" class="button"> Cancel</button>
+        </a>
+    </div>
+</form>
+
+</body>
+</html>
+
