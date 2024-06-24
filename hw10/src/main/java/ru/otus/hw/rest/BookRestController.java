@@ -62,15 +62,18 @@ public class BookRestController {
 
     @PostMapping("/save")
     public ResponseEntity<Void> save(@RequestBody BookDto book) {
+        HttpStatus httpStatus;
         Author author = authorService.findByFullName(book.getAuthorName());
         List<Genre> genreList = genreService.findByGenreName(book.getGenresNames());
         Set<Long> genreIdSet = genreList.stream().map(Genre::getId).collect(Collectors.toSet());
         if (book.getId() != 0) {
             bookService.update(book.getId(), book.getTitle(), author.getId(), genreIdSet);
+            httpStatus = HttpStatus.OK;
         } else {
             bookService.insert(book.getTitle(), author.getId(), genreIdSet);
+            httpStatus = HttpStatus.CREATED;
         }
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(httpStatus)
                 .build();
     }
 }

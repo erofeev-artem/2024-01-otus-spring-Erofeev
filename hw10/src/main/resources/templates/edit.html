@@ -130,12 +130,9 @@ $.ajax({
     headers: {
               "Content-Type": "application/json; odata=verbose"
     },
-    dataType: 'json',
 
-    statusCode: {
-    200: function(){
-    location.href = "/";
-    }
+    success: function(response){
+      location.href = "/";
     }
   });
   }
