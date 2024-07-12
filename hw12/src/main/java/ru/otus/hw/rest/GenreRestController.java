@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/genre")
+@RequestMapping("/genres")
 public class GenreRestController {
     private final GenreService genreService;
 
-    @GetMapping("/all")
+    @GetMapping
     public List<GenreDto> getGenres() {
         List<Genre> genreList = genreService.findAll();
         return genreList.stream().map(GenreDto::toDto).collect(Collectors.toList());

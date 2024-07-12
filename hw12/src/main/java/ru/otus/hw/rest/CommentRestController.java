@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/comments")
 @RequiredArgsConstructor
 public class CommentRestController {
 
@@ -28,7 +28,7 @@ public class CommentRestController {
         return commentService.findByBookId(bookId).stream().map(Comment::getText).collect(Collectors.toList());
     }
 
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<Void> saveComment(@RequestBody Map<String, String> commentData) {
         commentService.save(0, commentData.get("text"), Long.parseLong(commentData.get("bookId")));
         return ResponseEntity.status(HttpStatus.CREATED).build();

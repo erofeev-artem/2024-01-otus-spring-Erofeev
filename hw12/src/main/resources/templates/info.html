@@ -200,7 +200,7 @@ $(".save-comment").on("click", function() {
   }
 
   $.ajax({
-    url: '/comment/save',
+    url: '/comments',
     type: 'post',
     data: JSON.stringify(commentData),
     headers: {
@@ -219,7 +219,7 @@ $(".save-comment").on("click", function() {
 function getBookInfo(){
 $.ajax({
       type: 'GET',
-      url: '/book/'+currentId,
+      url: '/books/'+currentId,
       success: function(response){
       $('.input-id').val(response.id);
       $('.input-title').val(response.title);
@@ -234,7 +234,7 @@ function getComments(){
 $('.comment-info').children("input").remove();
 $.ajax({
       type: 'GET',
-      url: '/comment/book/'+currentId,
+      url: '/comments/book/'+currentId,
       success: function(response){
       $.each(response, function(key, value)
             {

@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CommentRestControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private CommentService commentService;
 
@@ -41,7 +42,7 @@ public class CommentRestControllerTest {
     @Test
     void saveComment() throws Exception {
         Map<String, String> commentData = Map.of("text", "awesome", "bookId", "17");
-        this.mockMvc.perform(post("/comment/save")
+        this.mockMvc.perform(post("/comments")
                         .content(new ObjectMapper().writeValueAsString(commentData))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -57,7 +58,7 @@ public class CommentRestControllerTest {
         Book book = new Book(1024, "Boring book", author, List.of(genre));
         Comment comment = new Comment(45, "Could have been better", book);
         when(commentService.findByBookId(1024)).thenReturn(List.of(comment));
-        this.mockMvc.perform(get("/comment/book/1024")
+        this.mockMvc.perform(get("/comments/book/1024")
                         .queryParam("bookId", "1024"))
                 .andExpect(status().is(200))
                 .andExpect(content()

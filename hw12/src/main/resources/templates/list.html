@@ -86,7 +86,7 @@ margin-right: 20px;
         <tbody id="tbody">
         <script>
         $(function () {
-        $.get('/book/all').done(function(books) {
+        $.get('/books').done(function(books) {
                  books.forEach(function (book) {
                  let genres = book.genresNames.map((s) => {var name = s.split("");
                                                                    name.unshift(" ");
@@ -122,7 +122,7 @@ margin-right: 20px;
  function deleteBook(book_id, e) {
  $.ajax({
         type: 'DELETE',
-        url: '/book/'+ book_id,
+        url: '/books/'+ book_id,
         success: function(response){
         $(e.parentNode.parentNode.remove());
     }

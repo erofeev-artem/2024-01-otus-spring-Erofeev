@@ -64,7 +64,7 @@ border-radius: 5px;
 <script>
     var fullNames;
     var authorSelect = $('#book-author-select');
-       $.get("/author/all", (data, status) => {
+       $.get("/authors", (data, status) => {
        fullNames = data.map(a=>a.fullName);
        $.each(fullNames, function(val, text) {
        authorSelect.append(
@@ -75,7 +75,7 @@ border-radius: 5px;
 
     var genreNames;
     var genreSelect = $('#book-genre-select');
-    $.get("/genre/all", (data, status) => {
+    $.get("/genres", (data, status) => {
       genreNames = data.map(a=>a.name);
     $.each(genreNames, function(val, text) {
        genreSelect.append(
@@ -124,7 +124,7 @@ border-radius: 5px;
     };
 
 $.ajax({
-    url: '/book/save',
+    url: '/books',
     type: 'post',
     data: JSON.stringify(bookDto),
     headers: {

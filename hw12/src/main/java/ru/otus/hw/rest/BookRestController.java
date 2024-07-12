@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/book")
+@RequestMapping("/books")
 public class BookRestController {
 
     private final BookService bookService;
@@ -33,10 +33,15 @@ public class BookRestController {
 
     private final GenreService genreService;
 
-    @GetMapping("/all")
+    @GetMapping
     public List<BookDto> allBooks() {
         List<Book> books = bookService.findAll();
         return books.stream().map(BookDto::toDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public BookDto getBookById(@PathVariable("id") long id) {
+        return BookDto.toDto(bookService.findById(id));
     }
 
     @DeleteMapping("/{id}")
@@ -45,12 +50,7 @@ public class BookRestController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}")
-    public BookDto getBookById(@PathVariable("id") long id) {
-        return BookDto.toDto(bookService.findById(id));
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<Void> save(@RequestBody BookDto book) {
         HttpStatus httpStatus;
         Author author = authorService.findByFullName(book.getAuthorName());

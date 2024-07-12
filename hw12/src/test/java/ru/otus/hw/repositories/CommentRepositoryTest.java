@@ -17,6 +17,7 @@ public class CommentRepositoryTest {
 
     @Autowired
     private BookRepository bookRepository;
+
     @Autowired
     private CommentRepository commentRepository;
 

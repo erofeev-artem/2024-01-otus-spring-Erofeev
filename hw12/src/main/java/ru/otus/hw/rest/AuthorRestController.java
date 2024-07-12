@@ -11,12 +11,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/author")
+@RequestMapping("/authors")
 public class AuthorRestController {
-
     private final AuthorService authorService;
 
-    @GetMapping("/all")
+    @GetMapping
     public List<Author> getAuthors() {
         return authorService.findAll();
     }

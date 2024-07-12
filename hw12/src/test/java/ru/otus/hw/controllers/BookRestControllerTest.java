@@ -63,7 +63,7 @@ public class BookRestControllerTest {
         Book starWars = new Book(11, "StarWars", author1, List.of(genre1, genre2));
         Book fightClub = new Book(11, "Fight club", author2, List.of(genre2));
         when(bookService.findAll()).thenReturn(List.of(starWars, fightClub));
-        this.mockMvc.perform(get("/book/all"))
+        this.mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(content()
                         .string(containsString("StarWars")))
@@ -78,7 +78,7 @@ public class BookRestControllerTest {
         when(authorService.findByFullName("Author1")).thenReturn(author1);
         when(genreService.findByGenreName(List.of("Genre1", "Genre2"))).thenReturn(List.of(genre1, genre2));
         BookDto bookDto = new BookDto(0, "Big city", "Author1", List.of("Genre1", "Genre2"));
-        this.mockMvc.perform(post("/book/save")
+        this.mockMvc.perform(post("/books")
                         .content(new ObjectMapper().writeValueAsString(bookDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -92,7 +92,7 @@ public class BookRestControllerTest {
         when(authorService.findByFullName("Author2")).thenReturn(author2);
         when(genreService.findByGenreName(List.of("Genre1", "Genre2"))).thenReturn(List.of(genre1, genre2));
         BookDto bookDto = new BookDto(1, "Old town road", "Author2", List.of("Genre1", "Genre2"));
-        this.mockMvc.perform(post("/book/save")
+        this.mockMvc.perform(post("/books")
                         .content(new ObjectMapper().writeValueAsString(bookDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -103,7 +103,7 @@ public class BookRestControllerTest {
     @WithMockUser(username = "user")
     @Test
     void deleteBook() throws Exception {
-        this.mockMvc.perform(delete("/book/22")
+        this.mockMvc.perform(delete("/books/22")
                         .queryParam("id", "22"))
                 .andExpect(status().is(204));
     }
@@ -114,7 +114,7 @@ public class BookRestControllerTest {
     void getBookById() throws Exception {
         Book lordOfTheRings = new Book(33, "Lord of the rings", author1, List.of(genre1, genre2));
         when(bookService.findById(33)).thenReturn(lordOfTheRings);
-        this.mockMvc.perform(get("/book/33")
+        this.mockMvc.perform(get("/books/33")
                         .queryParam("id", "33"))
                 .andExpect(status().is(200))
                 .andExpect(content()
