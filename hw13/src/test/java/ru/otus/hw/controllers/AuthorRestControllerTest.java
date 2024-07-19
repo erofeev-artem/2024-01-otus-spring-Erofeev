@@ -38,7 +38,7 @@ public class AuthorRestControllerTest {
     static List<Object[]> authenticationParameters() {
         ArrayList<Object[]> parameters = new ArrayList<>();
         parameters.add(new Object[]{"administrator", "admin", status().isOk(), "Author_1"});
-        parameters.add(new Object[]{"user", "user", status().isForbidden(), "Access denied"});
+        parameters.add(new Object[]{"user", "user", status().isForbidden(), ""});
         return parameters;
     }
 
@@ -49,7 +49,7 @@ public class AuthorRestControllerTest {
         Author author1 = new Author(1, "Author_1");
         Author author2 = new Author(2, "Author_2");
         when(authorService.findAll()).thenReturn(List.of(author1, author2));
-        this.mockMvc.perform(get("/authors")
+        this.mockMvc.perform(get("/api/authors")
                         .with(user(username).roles(role)))
                 .andExpect(status)
                 .andExpect(content()
@@ -62,7 +62,7 @@ public class AuthorRestControllerTest {
         Author author1 = new Author(1, "Author_1");
         Author author2 = new Author(2, "Author_2");
         when(authorService.findAll()).thenReturn(List.of(author1, author2));
-        this.mockMvc.perform(get("/authors"))
+        this.mockMvc.perform(get("/api/authors"))
                 .andExpect(status().isFound());
     }
 }

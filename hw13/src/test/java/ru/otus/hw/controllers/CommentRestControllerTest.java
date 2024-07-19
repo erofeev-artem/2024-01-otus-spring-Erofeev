@@ -53,7 +53,7 @@ public class CommentRestControllerTest {
     @MethodSource("authenticationParameters")
     public void save(String username, String role) throws Exception {
         Map<String, String> commentData = Map.of("text", "awesome", "bookId", "17");
-        mockMvc.perform(post("/comments")
+        mockMvc.perform(post("/api/comments")
                 .with(user(username).roles(role))
                 .content(new ObjectMapper().writeValueAsString(commentData))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -64,7 +64,7 @@ public class CommentRestControllerTest {
     @Test
     public void saveUnauthenticated() throws Exception {
         Map<String, String> commentData = Map.of("text", "awesome", "bookId", "17");
-        mockMvc.perform(post("/comments").content(new ObjectMapper().writeValueAsString(commentData))
+        mockMvc.perform(post("/api/comments").content(new ObjectMapper().writeValueAsString(commentData))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isFound());
     }
@@ -78,7 +78,7 @@ public class CommentRestControllerTest {
         Book book = new Book(1024, "Boring book", author, List.of(genre));
         Comment comment = new Comment(45, "Could have been better", book);
         when(commentService.findByBookId(1024)).thenReturn(List.of(comment));
-        this.mockMvc.perform(get("/comments/book/1024")
+        this.mockMvc.perform(get("/api/comments/book/1024")
                         .with(user(username).roles(role))
                         .queryParam("bookId", "1024"))
                 .andExpect(status().isOk());
@@ -92,7 +92,7 @@ public class CommentRestControllerTest {
         Book book = new Book(1024, "Boring book", author, List.of(genre));
         Comment comment = new Comment(45, "Could have been better", book);
         when(commentService.findByBookId(1024)).thenReturn(List.of(comment));
-        this.mockMvc.perform(get("/comments/book/1024")
+        this.mockMvc.perform(get("/api/comments/book/1024")
                         .queryParam("bookId", "1024"))
                 .andExpect(status().isFound());
     }

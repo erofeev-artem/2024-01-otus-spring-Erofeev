@@ -1,7 +1,6 @@
 package ru.otus.hw.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +18,6 @@ public class GenreRestController {
     private final GenreService genreService;
 
     @GetMapping
-    @PreAuthorize(value = "hasRole('admin')")
     public List<GenreDto> getGenres() {
         List<Genre> genreList = genreService.findAll();
         return genreList.stream().map(GenreDto::toDto).collect(Collectors.toList());

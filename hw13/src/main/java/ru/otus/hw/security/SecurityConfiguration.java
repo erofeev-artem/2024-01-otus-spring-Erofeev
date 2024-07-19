@@ -2,6 +2,7 @@ package ru.otus.hw.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -23,6 +23,17 @@ public class SecurityConfiguration {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers(HttpMethod.GET,"/").hasAnyRole("admin", "user")
+                        .requestMatchers("/edit").hasRole("admin")
+                        .requestMatchers("/create").hasRole("admin")
+                        .requestMatchers("/info").hasAnyRole("admin", "user")
+                        .requestMatchers("/api/authors").hasRole("admin")
+                        .requestMatchers("/api/comments/*").hasAnyRole("admin", "user")
+                        .requestMatchers("/api/genres").hasRole("admin")
+                        .requestMatchers(HttpMethod.GET, "/api/books").hasAnyRole("admin", "user")
+                        .requestMatchers(HttpMethod.GET, "/api/books/*").hasAnyRole("admin", "user")
+                        .requestMatchers(HttpMethod.POST, "/api/books").hasRole("admin")
+                        .requestMatchers(HttpMethod.DELETE, "/api/books/*").hasRole("admin")
                         .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults());

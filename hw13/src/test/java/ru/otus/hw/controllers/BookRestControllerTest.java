@@ -74,7 +74,7 @@ public class BookRestControllerTest {
         Book starWars = new Book(11, "StarWars", author1, List.of(genre1, genre2));
         Book fightClub = new Book(11, "Fight club", author2, List.of(genre2));
         when(bookService.findAll()).thenReturn(List.of(starWars, fightClub));
-        this.mockMvc.perform(get("/books")
+        this.mockMvc.perform(get("/api/books")
                         .with(user(username).roles(role)))
                 .andExpect(status().isOk())
                 .andExpect(content()
@@ -89,7 +89,7 @@ public class BookRestControllerTest {
         Book starWars = new Book(11, "StarWars", author1, List.of(genre1, genre2));
         Book fightClub = new Book(11, "Fight club", author2, List.of(genre2));
         when(bookService.findAll()).thenReturn(List.of(starWars, fightClub));
-        this.mockMvc.perform(get("/books"))
+        this.mockMvc.perform(get("/api/books"))
                 .andExpect(status().isFound());
     }
 
@@ -100,7 +100,7 @@ public class BookRestControllerTest {
         when(authorService.findByFullName("Author1")).thenReturn(author1);
         when(genreService.findByGenreName(List.of("Genre1", "Genre2"))).thenReturn(List.of(genre1, genre2));
         BookDto bookDto = new BookDto(0, "Big city", "Author1", List.of("Genre1", "Genre2"));
-        this.mockMvc.perform(post("/books")
+        this.mockMvc.perform(post("/api/books")
                         .with(user(username).roles(role))
                         .content(new ObjectMapper().writeValueAsString(bookDto))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -114,7 +114,7 @@ public class BookRestControllerTest {
         when(authorService.findByFullName("Author1")).thenReturn(author1);
         when(genreService.findByGenreName(List.of("Genre1", "Genre2"))).thenReturn(List.of(genre1, genre2));
         BookDto bookDto = new BookDto(0, "Big city", "Author1", List.of("Genre1", "Genre2"));
-        this.mockMvc.perform(post("/books")
+        this.mockMvc.perform(post("/api/books")
                         .content(new ObjectMapper().writeValueAsString(bookDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -135,7 +135,7 @@ public class BookRestControllerTest {
         when(authorService.findByFullName("Author2")).thenReturn(author2);
         when(genreService.findByGenreName(List.of("Genre1", "Genre2"))).thenReturn(List.of(genre1, genre2));
         BookDto bookDto = new BookDto(1, "Old town road", "Author2", List.of("Genre1", "Genre2"));
-        this.mockMvc.perform(post("/books")
+        this.mockMvc.perform(post("/api/books")
                         .with(user(username).roles(role))
                         .content(new ObjectMapper().writeValueAsString(bookDto))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -149,7 +149,7 @@ public class BookRestControllerTest {
         when(authorService.findByFullName("Author2")).thenReturn(author2);
         when(genreService.findByGenreName(List.of("Genre1", "Genre2"))).thenReturn(List.of(genre1, genre2));
         BookDto bookDto = new BookDto(1, "Old town road", "Author2", List.of("Genre1", "Genre2"));
-        this.mockMvc.perform(post("/books")
+        this.mockMvc.perform(post("/api/books")
                         .content(new ObjectMapper().writeValueAsString(bookDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -167,7 +167,7 @@ public class BookRestControllerTest {
     @ParameterizedTest
     @MethodSource("authenticationParametersDeleteBook")
     void deleteBook(String username, String role, ResultMatcher status) throws Exception {
-        this.mockMvc.perform(delete("/books/22")
+        this.mockMvc.perform(delete("/api/books/22")
                         .with(user(username).roles(role))
                         .queryParam("id", "22"))
                 .andExpect(status);
@@ -176,7 +176,7 @@ public class BookRestControllerTest {
     @DisplayName("Удаление книги с ролями без аутентификации")
     @Test
     void deleteBookUnauthenticated() throws Exception {
-        this.mockMvc.perform(delete("/books/22")
+        this.mockMvc.perform(delete("/api/books/22")
                         .queryParam("id", "22"))
                 .andExpect(status().isFound());
     }
@@ -187,7 +187,7 @@ public class BookRestControllerTest {
     void getBookById(String username, String role) throws Exception {
         Book lordOfTheRings = new Book(33, "Lord of the rings", author1, List.of(genre1, genre2));
         when(bookService.findById(33)).thenReturn(lordOfTheRings);
-        this.mockMvc.perform(get("/books/33")
+        this.mockMvc.perform(get("/api/books/33")
                         .with(user(username).roles(role))
                         .queryParam("id", "33"))
                 .andExpect(status().isOk())
@@ -201,7 +201,7 @@ public class BookRestControllerTest {
     void getBookByIdUnauthenticated() throws Exception {
         Book lordOfTheRings = new Book(33, "Lord of the rings", author1, List.of(genre1, genre2));
         when(bookService.findById(33)).thenReturn(lordOfTheRings);
-        this.mockMvc.perform(get("/books/33")
+        this.mockMvc.perform(get("/api/books/33")
                         .queryParam("id", "33"))
                 .andExpect(status().isFound());
     }

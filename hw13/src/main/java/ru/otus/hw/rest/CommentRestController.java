@@ -3,7 +3,6 @@ package ru.otus.hw.rest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +24,11 @@ public class CommentRestController {
     private final CommentService commentService;
 
     @GetMapping("/book/{bookId}")
-    @PreAuthorize(value = "hasAnyRole('admin', 'user')")
     public List<String> commentsByBookId(@PathVariable("bookId") long bookId) {
         return commentService.findByBookId(bookId).stream().map(Comment::getText).collect(Collectors.toList());
     }
 
     @PostMapping
-    @PreAuthorize(value = "hasAnyRole('admin', 'user')")
     public ResponseEntity<Void> saveComment(@RequestBody Map<String, String> commentData) {
         commentService.save(0, commentData.get("text"), Long.parseLong(commentData.get("bookId")));
         return ResponseEntity.status(HttpStatus.CREATED).build();

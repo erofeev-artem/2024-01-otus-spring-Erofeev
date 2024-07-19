@@ -3,7 +3,6 @@ package ru.otus.hw.rest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,27 +34,23 @@ public class BookRestController {
     private final GenreService genreService;
 
     @GetMapping
-    @PreAuthorize(value = "hasAnyRole('admin', 'user')")
     public List<BookDto> allBooks() {
         List<Book> books = bookService.findAll();
         return books.stream().map(BookDto::toDto).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(value = "hasAnyRole('admin', 'user')")
     public BookDto getBookById(@PathVariable("id") long id) {
         return BookDto.toDto(bookService.findById(id));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize(value = "hasRole('admin')")
     public ResponseEntity<String> deleteBook(@PathVariable("id") long id) {
         bookService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    @PreAuthorize(value = "hasRole('admin')")
     public ResponseEntity<Void> save(@RequestBody BookDto book) {
         HttpStatus httpStatus;
         Author author = authorService.findByFullName(book.getAuthorName());

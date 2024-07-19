@@ -39,7 +39,7 @@ public class GenreRestControllerTest {
     static List<Object[]> authenticationParameters() {
         ArrayList<Object[]> parameters = new ArrayList<>();
         parameters.add(new Object[]{"administrator", "admin", status().isOk(), "Genre_1"});
-        parameters.add(new Object[]{"user", "user", status().isForbidden(), "Access denied"});
+        parameters.add(new Object[]{"user", "user", status().isForbidden(), ""});
         return parameters;
     }
 
@@ -50,7 +50,7 @@ public class GenreRestControllerTest {
         Genre genre1 = new Genre(1, "Genre_1");
         Genre genre2 = new Genre(2, "Genre_2");
         when(genreService.findAll()).thenReturn(List.of(genre1, genre2));
-        this.mockMvc.perform(get("/genres")
+        this.mockMvc.perform(get("/api/genres")
                         .with(user(username).roles(role)))
                 .andExpect(status)
                 .andExpect(content()
@@ -60,6 +60,6 @@ public class GenreRestControllerTest {
     @DisplayName("Проверка доступа без аутентификации")
     @Test
     public void unauthenticatedUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/genres")).andExpect(status().isFound());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/genres")).andExpect(status().isFound());
     }
 }
