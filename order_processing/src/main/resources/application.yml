@@ -17,8 +17,6 @@ spring:
       client-id: "order-consumer"
       auto-offset-reset: earliest
 
-
-
   jpa:
     show-sql: true
     hibernate:
@@ -33,6 +31,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/order_processing
     username: admin
     password: password
+    hikari:
+      data-source-properties:
+        stringtype: unspecified
 
 
 

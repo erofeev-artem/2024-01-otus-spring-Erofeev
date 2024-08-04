@@ -1,7 +1,7 @@
 package ru.otus.order.service;
 
-import ru.otus.order.dto.ClientAddressDto;
+import ru.otus.order.dto.ConnectionAddressDto;
 
 public interface AllowedAddressService {
-    boolean checkHouseAddress(ClientAddressDto clientAddressDto);
+    boolean checkHouseAddress(ConnectionAddressDto connectionAddressDto);
 }

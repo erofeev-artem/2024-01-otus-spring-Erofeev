@@ -2,7 +2,7 @@ package ru.otus.order.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.order.dto.ClientAddressDto;
+import ru.otus.order.dto.ConnectionAddressDto;
 import ru.otus.order.model.AllowedAddress;
 import ru.otus.order.repository.AllowedAddressRepository;
 
@@ -15,11 +15,11 @@ public class AllowedAddressServiceImpl implements AllowedAddressService {
     private final AllowedAddressRepository allowedAddressRepository;
 
     @Override
-    public boolean checkHouseAddress(ClientAddressDto clientAddressDto) {
+    public boolean checkHouseAddress(ConnectionAddressDto connectionAddressDto) {
         Optional<AllowedAddress> optionalAllowedAddress = allowedAddressRepository
-                .findByCityAndStreetAndHouseAndBuildingAndStructure(clientAddressDto.city(),
-                        clientAddressDto.street(), clientAddressDto.house(),
-                        clientAddressDto.building(), clientAddressDto.structure());
+                .findByCityAndStreetAndHouseAndBuildingAndStructure(connectionAddressDto.city(),
+                        connectionAddressDto.street(), connectionAddressDto.house(),
+                        connectionAddressDto.building(), connectionAddressDto.structure());
         return optionalAllowedAddress.isPresent();
     }
 }

@@ -14,37 +14,37 @@ public class KafkaProducer implements DataProducer {
 
     private final String topic;
 
-    private final KafkaTemplate<String, OrderDto> template;
+    private final KafkaTemplate<String, OrderMessage> template;
 
-    private final Consumer<OrderDto> sendAsk;
+    private final Consumer<OrderMessage> sendAsk;
 
     public KafkaProducer(
             String topic,
-            KafkaTemplate<String, OrderDto> template,
-            Consumer<OrderDto> sendAsk) {
+            KafkaTemplate<String, OrderMessage> template,
+            Consumer<OrderMessage> sendAsk) {
         this.topic = topic;
         this.template = template;
         this.sendAsk = sendAsk;
     }
 
     @Override
-    public void send(OrderDto orderDto) {
+    public void send(OrderMessage orderMessage) {
         try {
-            LOG.info("value:{}", orderDto);
-            template.send(topic, orderDto)
+            LOG.info("value:{}", orderMessage);
+            template.send(topic, orderMessage)
                     .whenComplete(
                             (result, ex) -> {
                                 if (ex == null) {
                                     LOG.info(
                                             "message:was sent, offset:{}",
                                             result.getRecordMetadata().offset());
-                                    sendAsk.accept(orderDto);
+                                    sendAsk.accept(orderMessage);
                                 } else {
-                                    LOG.error("message :{} was not sent", orderDto, ex);
+                                    LOG.error("message :{} was not sent", orderMessage, ex);
                                 }
                             });
         } catch (Exception ex) {
-            LOG.error("send error, value:{}", orderDto, ex);
+            LOG.error("send error, value:{}", orderMessage, ex);
         }
     }
 }

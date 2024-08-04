@@ -22,10 +22,12 @@ import org.springframework.kafka.support.JacksonUtils;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
-import ru.otus.order_processing.dto.OrderDto;
-import ru.otus.order_processing.kafka.OrderConsumerService;
 import ru.otus.order_processing.kafka.OrderConsumer;
+import ru.otus.order_processing.kafka.OrderConsumerService;
+import ru.otus.order_processing.kafka.OrderMessage;
+import ru.otus.order_processing.mapper.OrderMapper;
 import ru.otus.order_processing.service.OrderService;
+import ru.otus.order_processing.service.TariffService;
 
 import java.util.List;
 
@@ -46,10 +48,10 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, OrderDto> consumerFactory(
+    public ConsumerFactory<String, OrderMessage> consumerFactory(
             KafkaProperties kafkaProperties, ObjectMapper mapper) {
 
-        JsonDeserializer<OrderDto> deserializer = new JsonDeserializer<>(OrderDto.class);
+        JsonDeserializer<OrderMessage> deserializer = new JsonDeserializer<>(OrderMessage.class);
         deserializer.setRemoveTypeHeaders(false);
         deserializer.addTrustedPackages("*");
         deserializer.setUseTypeMapperForKey(true);
@@ -58,22 +60,22 @@ public class KafkaConfig {
 //        var props = new HashMap<String, Object>();
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
-//        props.put(TYPE_MAPPINGS, "ru.otus.order_processing.dto.OrderDto.java:ru.otus.order_processing.dto.OrderDto.java");
+//        props.put(TYPE_MAPPINGS, "ru.otus.order_processing.dto.OrderMessage.java:ru.otus.order_processing.dto.OrderMessage.java");
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3);
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 3_000);
 
-//        var deserializer = new JsonDeserializer<OrderDto>();
-//        deserializer.addTrustedPackages("ru.otus.order_processing.dto.OrderDto");
+//        var deserializer = new JsonDeserializer<OrderMessage>();
+//        deserializer.addTrustedPackages("ru.otus.order_processing.dto.OrderMessage");
 
-        var kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, OrderDto>(props);
+        var kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, OrderMessage>(props);
         kafkaConsumerFactory.setValueDeserializer(deserializer);
         return kafkaConsumerFactory;
     }
 
     @Bean("listenerContainerFactory")
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, OrderDto>>
-    listenerContainerFactory(ConsumerFactory<String, OrderDto> consumerFactory) {
-        var factory = new ConcurrentKafkaListenerContainerFactory<String, OrderDto>();
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, OrderMessage>>
+    listenerContainerFactory(ConsumerFactory<String, OrderMessage> consumerFactory) {
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, OrderMessage>();
         factory.setConsumerFactory(consumerFactory);
         factory.setBatchListener(true);
         factory.setConcurrency(1);
@@ -93,8 +95,8 @@ public class KafkaConfig {
     }
 
     @Bean
-    public OrderConsumer orderConsumer(OrderService orderService) {
-        return new OrderConsumerService(orderService);
+    public OrderConsumer orderConsumer(OrderService orderService, TariffService tariffService, OrderMapper orderMapper) {
+        return new OrderConsumerService(orderService, tariffService, orderMapper);
     }
 
     @Bean
@@ -112,7 +114,7 @@ public class KafkaConfig {
         @KafkaListener(
                 topics = "${application.kafka.topic}",
                 containerFactory = "listenerContainerFactory")
-        public void listen(@Payload List<OrderDto> values) {
+        public void listen(@Payload List<OrderMessage> values) {
             LOG.info("values, values.size:{}", values.size());
             orderConsumer.accept(values);
         }

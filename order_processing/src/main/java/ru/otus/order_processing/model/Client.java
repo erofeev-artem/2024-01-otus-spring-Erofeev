@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -33,6 +34,21 @@ public class Client {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+    @Column(name = "birth_place")
+    private String birthPlace;
+
+    @Column(name = "passport_series")
+    private int passportSeries;
+
+    @Column(name = "passport_number")
+    private int passportNumber;
+
+    @Column(name = "issued_by")
+    private String issuedBy;
 
     @Column(name = "created_at")
     @CreatedDate

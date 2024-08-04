@@ -2,7 +2,7 @@ package ru.otus.order.dto;
 
 public record OrderDto(long tariffId,
 
-                       ClientDto clientDto,
+                       CustomerDto customerDto,
 
-                       ClientAddressDto clientAddressDto) {
+                       ConnectionAddressDto connectionAddressDto) {
 }

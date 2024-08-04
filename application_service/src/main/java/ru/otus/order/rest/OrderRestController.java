@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.otus.order.dto.OrderDto;
 import ru.otus.order.kafka.KafkaProducer;
 import ru.otus.order.service.AllowedAddressService;
-import ru.otus.order.service.ClientAddressService;
+import ru.otus.order.service.ConnectionAddressService;
 import ru.otus.order.service.OrderService;
 
 @RestController
@@ -22,17 +22,16 @@ public class OrderRestController {
 
     private final AllowedAddressService allowedAddressService;
 
-    private final ClientAddressService clientAddressService;
-    private final KafkaProducer kafkaProducer;
+    private final ConnectionAddressService connectionAddressService;
 
     @PostMapping
     public ResponseEntity<String> save(@RequestBody OrderDto orderDto) {
-        if (!allowedAddressService.checkHouseAddress(orderDto.clientAddressDto())) {
+        if (!allowedAddressService.checkHouseAddress(orderDto.connectionAddressDto())) {
             return new ResponseEntity<>("Ваш дом не подключен", HttpStatus.OK);
-        } else if (clientAddressService.checkApartmentAddress(orderDto.clientAddressDto())) {
+        } else if (connectionAddressService.checkApartmentAddress(orderDto.connectionAddressDto())) {
             return new ResponseEntity<>("Этот адрес уже подключен", HttpStatus.OK);
         } else {
-            kafkaProducer.send(orderDto);
+            orderService.send(orderDto);
             return new ResponseEntity<>("Спасибо за заявку, наш оператор свяжется с вами в ближайшее время",
                     HttpStatus.CREATED);
         }

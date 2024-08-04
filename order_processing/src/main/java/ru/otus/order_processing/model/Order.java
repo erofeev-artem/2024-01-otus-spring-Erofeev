@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ru.otus.order_processing.dto.CustomerDto;
 
 import java.time.LocalDateTime;
 
@@ -27,16 +28,24 @@ public class Order {
     private Tariff tariff;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_address_id")
-    private ClientAddress clientAddress;
+    @JoinColumn(name = "connection_address_id")
+    private ConnectionAddress connectionAddress;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "engineer_id")
+    private Engineer engineer;
 
     @Column(name = "order_status")
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus orderStatus;
 
     @Column(name = "comment")
     private String comment;

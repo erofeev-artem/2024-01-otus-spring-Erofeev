@@ -1,6 +1,6 @@
 package ru.otus.order.dto;
 
-public record ClientAddressDto(
+public record ConnectionAddressDto(
         String city,
 
         String street,
