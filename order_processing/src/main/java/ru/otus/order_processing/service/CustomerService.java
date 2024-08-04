@@ -5,5 +5,7 @@ import ru.otus.order_processing.model.Customer;
 
 public interface CustomerService {
 
-    public Customer save(CustomerDto customerDto);
+    public Customer saveOrUpdate(CustomerDto customerDto);
+
+    public Customer findByPhoneNumber(String phoneNumber);
 }

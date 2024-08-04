@@ -39,4 +39,8 @@ VALUES ('Новосибирск', 'Кирова', '2', now(), now()),
 ('Новосибирск', 'Ленина', '4', now(), now()),
 ('Новосибирск', 'Ленина', '5', now(), now());
 
+INSERT INTO connection_address(allowed_address_id, apartment, created_at, modified_at)
+VALUES (1, '1', now(), now()), (1, '2', now(), now()), (3, '1', now(), now()),
+(3, '2', now(), now()),(3, '3', now(), now());
+
 

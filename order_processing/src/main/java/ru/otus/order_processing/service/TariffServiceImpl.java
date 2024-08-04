@@ -9,7 +9,6 @@ import ru.otus.order_processing.model.Tariff;
 import ru.otus.order_processing.repository.TariffRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -19,16 +18,29 @@ public class TariffServiceImpl implements TariffService {
 
     private final TariffMapper tariffMapper;
 
+    @Override
     public List<TariffDto> findActual() {
         List<Tariff> actualTariffs = tariffRepository.findByArchivedFalse();
-//        return actualTariffs.stream().map(tariffMapper::tariffToDto)
-//                .collect(Collectors.toList());
-        return null;
+        return actualTariffs.stream().map(tariffMapper::tariffToDto).toList();
     }
 
+    @Override
     public TariffDto findById(long id) {
         Tariff tariff = tariffRepository.findById(id).orElseThrow(()
                 -> new EntityNotFoundException("Tariff with id %d not found".formatted(id)));
         return tariffMapper.tariffToDto(tariff);
+    }
+
+    @Override
+    public Tariff findByNameAndArchived(String name, boolean archived) {
+        return tariffRepository.findByNameAndArchived(name, archived)
+                .orElseThrow(()
+                        -> new EntityNotFoundException("Tariff with name %s and archived status %b not found"
+                        .formatted(name, archived)));
+    }
+
+    @Override
+    public Tariff dtoToEntity(TariffDto dto) {
+        return tariffMapper.dtoToTariff(dto);
     }
 }

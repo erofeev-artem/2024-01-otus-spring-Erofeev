@@ -30,7 +30,7 @@ public class OrderConsumerService implements OrderConsumer {
             LOG.info("log:{}", orderMessage);
             TariffDto tariffDto = tariffService.findById(orderMessage.tariffId());
             OrderDto orderDto = orderMapper.messageToDto(orderMessage, tariffDto, OrderStatus.NEW);
-            orderService.save(orderDto);
+            orderService.saveOrder(orderDto);
         }
     }
 }

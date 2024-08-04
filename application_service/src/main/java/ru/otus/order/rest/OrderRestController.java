@@ -25,7 +25,7 @@ public class OrderRestController {
     private final ConnectionAddressService connectionAddressService;
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<String> createNewOrder(@RequestBody OrderDto orderDto) {
         if (!allowedAddressService.checkHouseAddress(orderDto.connectionAddressDto())) {
             return new ResponseEntity<>("Ваш дом не подключен", HttpStatus.OK);
         } else if (connectionAddressService.checkApartmentAddress(orderDto.connectionAddressDto())) {

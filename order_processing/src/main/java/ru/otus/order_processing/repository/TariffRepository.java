@@ -10,5 +10,5 @@ public interface TariffRepository extends JpaRepository<Tariff, Long> {
 
     List<Tariff> findByArchivedFalse();
 
-    Optional<Tariff> findByName(String name);
+    Optional<Tariff> findByNameAndArchived(String name, boolean archived);
 }

@@ -15,11 +15,13 @@ public interface OrderMapper {
     @Mapping(target = "customerDto", source = "customer")
     @Mapping(target = "connectionAddressDto", source = "connectionAddress")
     @Mapping(target = "tariffDto", source = "tariff")
+    @Mapping(target = "clientDto", source = "client")
     OrderDto orderToDto(Order order);
 
     @Mapping(target = "client", source = "clientDto")
     @Mapping(target = "connectionAddress", source = "connectionAddressDto")
     @Mapping(target = "tariff", source = "tariffDto")
+    @Mapping(target = "customer", source = "customerDto")
     Order dtoToOrder(OrderDto orderDto);
 
     @Mapping(source = "tariffDto", target = "tariffDto")

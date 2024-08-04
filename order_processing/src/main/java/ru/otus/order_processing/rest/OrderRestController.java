@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.otus.order_processing.dto.EngineerOrderUpdateDto;
 import ru.otus.order_processing.dto.OrderDto;
 import ru.otus.order_processing.mapper.OrderMapper;
 import ru.otus.order_processing.model.Order;
@@ -21,35 +22,51 @@ public class OrderRestController {
 
     private final OrderMapper orderMapper;
 
-    @GetMapping
-    public ResponseEntity<List<OrderDto>> getNewOrders(@RequestParam("status") OrderStatus status) {
-        List<Order> newOrders = orderService.findByOrderStatus(status);
+    @GetMapping("/new")
+    public ResponseEntity<List<OrderDto>> getNewOrders() {
+        List<Order> newOrders = orderService.findByOrderStatus(OrderStatus.NEW);
         List<OrderDto> ordersDto = newOrders.stream().map(orderMapper::orderToDto).toList();
         return ResponseEntity.status(HttpStatus.OK).body(ordersDto);
     }
 
+    @GetMapping("/confirmed")
+    public ResponseEntity<List<OrderDto>> getConfirmedOrders() {
+        List<Order> newOrders = orderService.findByOrderStatus(OrderStatus.CONFIRMED);
+        List<OrderDto> ordersDto = newOrders.stream().map(orderMapper::orderToDto).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(ordersDto);
+    }
+
+    @GetMapping("/completed")
+    public ResponseEntity<List<OrderDto>> getCompletedOrders() {
+        List<Order> newOrders = orderService.findByOrderStatus(OrderStatus.COMPLETED);
+        List<OrderDto> ordersDto = newOrders.stream().map(orderMapper::orderToDto).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(ordersDto);
+    }
+
+    @GetMapping("/rejected")
+    public ResponseEntity<List<OrderDto>> getRejectedOrders() {
+        List<Order> newOrders = orderService.findByOrderStatus(OrderStatus.REJECTED);
+        List<OrderDto> ordersDto = newOrders.stream().map(orderMapper::orderToDto).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(ordersDto);
+    }
+
+    @GetMapping("/assigned")
+    public ResponseEntity<List<OrderDto>> getAssignedOrders(@RequestParam long engineerId) {
+        List<OrderDto> orders = orderService.findAssignedOrders(engineerId).stream()
+                .map(orderMapper::orderToDto).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(orders);
+    }
+
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody OrderDto orderDto) {
-        orderService.save(orderDto);
-        HttpStatus httpStatus;
-//        Author author = authorService.findByFullName(book.getAuthorName());
-//        List<Genre> genreList = genreService.findByGenreName(book.getGenresNames());
-//        Set<Long> genreIdSet = genreList.stream().map(Genre::getId).collect(Collectors.toSet());
-//        if (book.getId() != 0) {
-//            bookService.update(book.getId(), book.getTitle(), author.getId(), genreIdSet);
-//            httpStatus = HttpStatus.OK;
-//        } else {
-//            bookService.insert(book.getTitle(), author.getId(), genreIdSet);
-//            httpStatus = HttpStatus.CREATED;
-//        }
+        orderService.saveOrder(orderDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .build();
     }
 
-//    @PostMapping
-//    public ResponseEntity<List<OrderDto>> setConnectionConditions() {
-
-//    }
-
-
+    @PostMapping("/update")
+    public ResponseEntity<OrderDto> update(@RequestBody EngineerOrderUpdateDto updateDto) {
+        OrderDto orderDto = orderService.update(updateDto);
+        return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+    }
 }

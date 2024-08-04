@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record ClientDto(
+        long id,
+
         String firstName,
 
         String middleName,

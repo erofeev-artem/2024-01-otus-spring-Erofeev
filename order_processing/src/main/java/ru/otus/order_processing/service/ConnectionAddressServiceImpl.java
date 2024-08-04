@@ -8,6 +8,8 @@ import ru.otus.order_processing.mapper.ConnectionAddressMapper;
 import ru.otus.order_processing.model.ConnectionAddress;
 import ru.otus.order_processing.repository.ConnectionAddressRepository;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class ConnectionAddressServiceImpl implements ConnectionAddressService {
@@ -18,7 +20,17 @@ public class ConnectionAddressServiceImpl implements ConnectionAddressService {
 
     @Transactional
     public ConnectionAddress save(ConnectionAddressDto connectionAddressDto) {
-        ConnectionAddress connectionAddress = connectionAddressMapper.dtoToAddress(connectionAddressDto);
-        return connectionAddressRepository.save(connectionAddress);
+        Optional<ConnectionAddress> existedAddress = connectionAddressRepository
+                .findByCityAndStreetAndHouseAndBuildingAndStructure(connectionAddressDto.city(),
+                        connectionAddressDto.street(), connectionAddressDto.house(), connectionAddressDto.building(),
+                        connectionAddressDto.structure());
+        ConnectionAddress savedConnectionAddress;
+        if (existedAddress.isEmpty()) {
+            ConnectionAddress connectionAddress = connectionAddressMapper.dtoToAddress(connectionAddressDto);
+            savedConnectionAddress = connectionAddressRepository.save(connectionAddress);
+        } else {
+            savedConnectionAddress = existedAddress.get();
+        }
+        return connectionAddressRepository.save(savedConnectionAddress);
     }
 }

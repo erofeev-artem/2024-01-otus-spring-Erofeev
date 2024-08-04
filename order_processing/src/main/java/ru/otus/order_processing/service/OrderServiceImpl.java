@@ -3,20 +3,15 @@ package ru.otus.order_processing.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.order_processing.dto.ConnectionAddressDto;
+import ru.otus.order_processing.dto.EngineerOrderUpdateDto;
 import ru.otus.order_processing.dto.OrderDto;
 import ru.otus.order_processing.exception.EntityNotFoundException;
-import ru.otus.order_processing.mapper.ClientMapper;
-import ru.otus.order_processing.mapper.ConnectionAddressMapper;
 import ru.otus.order_processing.mapper.OrderMapper;
-import ru.otus.order_processing.mapper.TariffMapper;
 import ru.otus.order_processing.model.*;
-import ru.otus.order_processing.repository.ClientRepository;
-import ru.otus.order_processing.repository.ConnectionAddressRepository;
 import ru.otus.order_processing.repository.OrderRepository;
-import ru.otus.order_processing.repository.TariffRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -24,53 +19,48 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final ClientRepository clientRepository;
-
-    private final ConnectionAddressRepository connectionAddressRepository;
-
-    private final TariffRepository tariffRepository;
-
-    private final ClientMapper clientMapper;
-
-    private final ConnectionAddressMapper connectionAddressMapper;
     private final OrderMapper orderMapper;
-    private final TariffMapper tariffMapper;
+
     private final CustomerService customerService;
 
-    @Transactional
-    @Override
-    public void save(OrderDto orderDto) {
-        if (orderDto.orderStatus().equals(OrderStatus.NEW)) {
-            saveNewOrder(orderDto);
-        } else if (orderDto.orderStatus().equals(OrderStatus.CONFIRMED)) {
-            saveConfirmedOrder(orderDto);
+    private final ConnectionAddressService connectionAddressService;
 
+    private final TariffService tariffService;
+
+    private final ClientService clientService;
+
+    @Override
+    public OrderDto saveOrder(OrderDto orderDto) {
+        Order order;
+        if (orderDto.orderStatus().equals(OrderStatus.NEW)) {
+            order = saveNewOrder(orderDto);
+        } else {
+            order = save(orderDto);
         }
-//        String tariffName = orderDto.tariffDto().name();
-//        Tariff tariff = tariffRepository.findByName(tariffName)
-//                .orElseThrow(()
-//                        -> new EntityNotFoundException("Tariff with name %s not found".formatted(tariffName)));
-//        ConnectionAddressDto connectionAddressDto = orderDto.connectionAddressDto();
-//        ConnectionAddress connectionAddress = connectionAddressMapper.dtoToAddress(connectionAddressDto);
-//        ConnectionAddress savedConnectionAddress = connectionAddressRepository.save(connectionAddress);
-//        CustomerDto customerDto = orderDto.customerDto();
-//        Customer savedCustomer;
-//        Optional<Client> existingClient = clientRepository.findByFirstNameAndMiddleNameAndLastNameAndPhoneNumber(
-//                clientDto.firstName(), clientDto.middleName(), clientDto.lastName(), clientDto.phoneNumber());
-//        if (existingClient.isEmpty()) {
-//            Client client = clientMapper.dtoToClient(orderDto.clientDto());
-//            savedClient = clientRepository.save(client);
-//        } else {
-//            savedClient = existingClient.get();
-//        }
-//        Order order = Order.builder()
-//                .id(0)
-//                .tariff(tariff)
-//                .client(savedClient)
-//                .connectionAddress(savedConnectionAddress)
-//                .orderStatus(OrderStatus.NEW)
-//                .build();
-//        orderRepository.save(order);
+        return orderMapper.orderToDto(order);
+    }
+
+    @Override
+    @Transactional
+    public OrderDto update(EngineerOrderUpdateDto updateDto) {
+        Order order = orderRepository.findById(updateDto.orderId()).orElseThrow(()
+                -> new EntityNotFoundException("Order with id number %d not found".formatted(updateDto.orderId())));
+        if (updateDto.tariffDto() != null) {
+            order.setTariff(tariffService.dtoToEntity(updateDto.tariffDto()));
+        }
+        if (updateDto.clientDto() != null) {
+            Client client = clientService.dtoToEntity(updateDto.clientDto());
+            Client savedClient = clientService.save(client);
+            order.setClient(savedClient);
+        }
+        if (updateDto.orderStatus() != null) {
+            order.setOrderStatus(updateDto.orderStatus());
+        }
+        if (updateDto.comment() != null) {
+            order.setComment(updateDto.comment());
+        }
+        Order savedOrder = orderRepository.save(order);
+        return orderMapper.orderToDto(savedOrder);
     }
 
     @Override
@@ -78,33 +68,52 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findByOrderStatus(orderStatus);
     }
 
-//    public void setEngineer(O){
-//        orderRepository.save()
-
-//    }
-
-    private Order saveNewOrder(OrderDto orderDto) {
-        String tariffName = orderDto.tariffDto().name();
-        Tariff tariff = tariffRepository.findByName(tariffName)
-                .orElseThrow(()
-                        -> new EntityNotFoundException("Tariff with name %s not found".formatted(tariffName)));
-        ConnectionAddressDto connectionAddressDto = orderDto.connectionAddressDto();
-        ConnectionAddress connectionAddress = connectionAddressMapper.dtoToAddress(connectionAddressDto);
-        ConnectionAddress savedConnectionAddress = connectionAddressRepository.save(connectionAddress);
-        Customer savedCustomer = customerService.save(orderDto.customerDto());
-        Order order = Order.builder()
-                .id(0)
-                .tariff(tariff)
-                .customer(savedCustomer)
-                .connectionAddress(savedConnectionAddress)
-                .orderStatus(OrderStatus.NEW)
-                .build();
-        return orderRepository.save(order);
+    @Override
+    public List<Order> findAssignedOrders(long engineerId) {
+        return orderRepository.findByEngineerId(engineerId);
     }
 
-    private Order saveConfirmedOrder(OrderDto orderDto) {
-        Order order = orderMapper.dtoToOrder(orderDto);
-        Order save = orderRepository.save(order);
-        return save;
+    @Transactional
+    private Order saveNewOrder(OrderDto orderDto) {
+        ConnectionAddress connectionAddress = connectionAddressService.save(orderDto.connectionAddressDto());
+        Customer customer = customerService.saveOrUpdate(orderDto.customerDto());
+        Tariff tariff = tariffService
+                .findByNameAndArchived(orderDto.tariffDto().name(), orderDto.tariffDto().archived());
+        Optional<Order> orderOptional = findByTariffAndCustomerAndConnectionAddressAndStatus(tariff, customer,
+                connectionAddress, orderDto.orderStatus());
+        if (orderOptional.isEmpty()) {
+            Order order = Order.builder()
+                    .id(0)
+                    .tariff(tariff)
+                    .customer(customer)
+                    .connectionAddress(connectionAddress)
+                    .orderStatus(OrderStatus.NEW)
+                    .build();
+            return orderRepository.save(order);
+        } else {
+            return orderOptional.get();
+        }
+    }
+
+    @Transactional
+    private Order save(OrderDto orderDto) {
+        Order existedOrder = orderRepository.findById(orderDto.id()).orElseThrow(()
+                -> new EntityNotFoundException("Order with id number %d not found".formatted(orderDto.id())));
+        Order newOrder = orderMapper.dtoToOrder(orderDto);
+        existedOrder.setTariff(newOrder.getTariff());
+        existedOrder.setClient(newOrder.getClient());
+        existedOrder.setConnectionAddress(newOrder.getConnectionAddress());
+        existedOrder.setEngineer(newOrder.getEngineer());
+        existedOrder.setOrderStatus(newOrder.getOrderStatus());
+        existedOrder.setConnectionDate(newOrder.getConnectionDate());
+        existedOrder.setComment(orderDto.comment());
+        return orderRepository.save(existedOrder);
+    }
+
+    private Optional<Order> findByTariffAndCustomerAndConnectionAddressAndStatus(Tariff tariff, Customer customer,
+                                                                                 ConnectionAddress connectionAddress,
+                                                                                 OrderStatus status) {
+        return orderRepository
+                .findByTariffAndCustomerAndConnectionAddressAndOrderStatus(tariff, customer, connectionAddress, status);
     }
 }

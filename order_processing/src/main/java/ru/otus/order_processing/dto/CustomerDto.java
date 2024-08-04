@@ -4,9 +4,9 @@ public record CustomerDto(
         long id,
         String firstName,
 
-                          String middleName,
+        String middleName,
 
-                          String lastName,
+        String lastName,
 
-                          String phoneNumber) {
+        String phoneNumber) {
 }

@@ -1,14 +1,18 @@
 package ru.otus.order_processing.dto;
 
-public record ConnectionAddressDto(String city,
+public record ConnectionAddressDto(
 
-                                   String street,
+        long id,
 
-                                   String house,
+        String city,
 
-                                   String building,
+        String street,
 
-                                   String structure,
+        String house,
 
-                                   String apartment) {
+        String building,
+
+        String structure,
+
+        String apartment) {
 }
