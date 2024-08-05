@@ -3,7 +3,6 @@ package ru.otus.order_processing.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.order_processing.dto.ClientDto;
-import ru.otus.order_processing.exception.EntityNotFoundException;
 import ru.otus.order_processing.mapper.ClientMapper;
 import ru.otus.order_processing.model.Client;
 import ru.otus.order_processing.repository.ClientRepository;

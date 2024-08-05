@@ -7,8 +7,13 @@ import ru.otus.order_processing.dto.EngineerOrderUpdateDto;
 import ru.otus.order_processing.dto.OrderDto;
 import ru.otus.order_processing.exception.EntityNotFoundException;
 import ru.otus.order_processing.mapper.OrderMapper;
-import ru.otus.order_processing.model.*;
+import ru.otus.order_processing.model.Order;
+import ru.otus.order_processing.model.OrderStatus;
+import ru.otus.order_processing.model.Tariff;
+import ru.otus.order_processing.model.Customer;
+import ru.otus.order_processing.model.ConnectionAddress;
 import ru.otus.order_processing.repository.OrderRepository;
+import ru.otus.order_processing.model.Client;
 
 import java.util.List;
 import java.util.Optional;
@@ -69,8 +74,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAssignedOrders(long engineerId) {
-        return orderRepository.findByEngineerId(engineerId);
+    public List<Order> findAssignedOrders(long userId) {
+        return orderRepository.findByUserId(userId);
     }
 
     @Transactional
@@ -103,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
         existedOrder.setTariff(newOrder.getTariff());
         existedOrder.setClient(newOrder.getClient());
         existedOrder.setConnectionAddress(newOrder.getConnectionAddress());
-        existedOrder.setEngineer(newOrder.getEngineer());
+        existedOrder.setUser(newOrder.getUser());
         existedOrder.setOrderStatus(newOrder.getOrderStatus());
         existedOrder.setConnectionDate(newOrder.getConnectionDate());
         existedOrder.setComment(orderDto.comment());

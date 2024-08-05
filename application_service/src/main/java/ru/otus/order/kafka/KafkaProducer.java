@@ -3,7 +3,6 @@ package ru.otus.order.kafka;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import ru.otus.order.dto.OrderDto;
 
 import java.util.function.Consumer;
 

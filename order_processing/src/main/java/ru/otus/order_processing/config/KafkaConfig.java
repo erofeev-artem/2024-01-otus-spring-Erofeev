@@ -36,7 +36,7 @@ public class KafkaConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(KafkaConfig.class);
 
-    public final String topicName;
+    private final String topicName;
 
     public KafkaConfig(@Value("${application.kafka.topic}") String topicName) {
         this.topicName = topicName;
@@ -56,16 +56,11 @@ public class KafkaConfig {
         deserializer.addTrustedPackages("*");
         deserializer.setUseTypeMapperForKey(true);
 
-        var props = kafkaProperties.buildConsumerProperties();
-//        var props = new HashMap<String, Object>();
+        var props = kafkaProperties.buildConsumerProperties(null);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
-//        props.put(TYPE_MAPPINGS, "ru.otus.order_processing.dto.OrderMessage.java:ru.otus.order_processing.dto.OrderMessage.java");
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 3);
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 3_000);
-
-//        var deserializer = new JsonDeserializer<OrderMessage>();
-//        deserializer.addTrustedPackages("ru.otus.order_processing.dto.OrderMessage");
 
         var kafkaConsumerFactory = new DefaultKafkaConsumerFactory<String, OrderMessage>(props);
         kafkaConsumerFactory.setValueDeserializer(deserializer);

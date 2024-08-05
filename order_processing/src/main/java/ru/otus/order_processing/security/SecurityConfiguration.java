@@ -17,25 +17,28 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement((session) -> session
+        http.csrf(AbstractHttpConfigurer::disable).sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.GET,"/").hasAnyRole("admin", "user")
-                        .requestMatchers("/edit").hasRole("admin")
-                        .requestMatchers("/create").hasRole("admin")
-                        .requestMatchers("/info").hasAnyRole("admin", "user")
-                        .requestMatchers("/api/authors").hasRole("admin")
-                        .requestMatchers("/api/comments/*").hasAnyRole("admin", "user")
-                        .requestMatchers("/api/genres").hasRole("admin")
-                        .requestMatchers(HttpMethod.GET, "/api/books").hasAnyRole("admin", "user")
-                        .requestMatchers(HttpMethod.GET, "/api/books/*").hasAnyRole("admin", "user")
-                        .requestMatchers(HttpMethod.POST, "/api/books").hasRole("admin")
-                        .requestMatchers(HttpMethod.DELETE, "/api/books/*").hasRole("admin")
-                        .anyRequest().authenticated()
-                )
-                .formLogin(Customizer.withDefaults());
+                        .requestMatchers(HttpMethod.GET, "/api/engineers")
+                        .hasAnyRole("Administrator", "Operator")
+                        .requestMatchers(HttpMethod.GET, "/api/tariffs")
+                        .hasAnyRole("Administrator", "Operator", "Engineer")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/new")
+                        .hasAnyRole("Administrator", "Operator")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/confirmed")
+                        .hasAnyRole("Administrator", "Operator")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/completed")
+                        .hasAnyRole("Administrator", "Operator")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/rejected")
+                        .hasAnyRole("Administrator", "Operator")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/assigned")
+                        .hasAnyRole("Administrator", "Engineer")
+                        .requestMatchers(HttpMethod.POST, "/api/orders/")
+                        .hasAnyRole("Administrator", "Operator")
+                        .requestMatchers(HttpMethod.POST, "/api/orders/update")
+                        .hasAnyRole("Administrator", "Engineer")
+                        .anyRequest().authenticated()).formLogin(Customizer.withDefaults());
         return http.build();
     }
 

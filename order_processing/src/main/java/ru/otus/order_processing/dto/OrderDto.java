@@ -10,7 +10,7 @@ public record OrderDto(
         CustomerDto customerDto,
         ClientDto clientDto,
         ConnectionAddressDto connectionAddressDto,
-        EngineerDto engineer,
+        UserDto userDto,
         OrderStatus orderStatus,
         LocalDate connectionDate,
         String comment

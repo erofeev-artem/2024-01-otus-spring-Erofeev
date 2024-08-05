@@ -7,9 +7,11 @@ import java.util.Optional;
 
 public interface ConnectionAddressRepository extends JpaRepository<ConnectionAddress, Long> {
 
-    Optional<ConnectionAddress> findByCityAndStreetAndHouseAndBuildingAndStructure(String city,
-                                                                                   String street,
-                                                                                   String house,
-                                                                                   String building,
-                                                                                   String structure);
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    Optional<ConnectionAddress> findByCityAndStreetAndHouseAndBuildingAndStructureAndApartment(String city,
+                                                                                               String street,
+                                                                                               String house,
+                                                                                               String building,
+                                                                                               String structure,
+                                                                                               String apartment);
 }

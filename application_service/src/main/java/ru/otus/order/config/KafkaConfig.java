@@ -26,14 +26,14 @@ public class KafkaConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(KafkaConfig.class);
 
-    public final String topicName;
+    private final String topicName;
+
+    @Value(value = "${spring.kafka.producer.bootstrap-servers}")
+    private String bootstrapAddress;
 
     public KafkaConfig(@Value("${application.kafka.topic}") String topicName) {
         this.topicName = topicName;
     }
-
-    @Value(value = "${spring.kafka.producer.bootstrap-servers}")
-    private String bootstrapAddress;
 
     @Bean
     public ObjectMapper objectMapper() {

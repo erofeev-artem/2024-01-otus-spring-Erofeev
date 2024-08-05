@@ -20,6 +20,7 @@ public class OrderConsumerService implements OrderConsumer {
     private static final Logger LOG = LoggerFactory.getLogger(OrderConsumerService.class);
 
     private final OrderService orderService;
+
     private final TariffService tariffService;
 
     private final OrderMapper orderMapper;

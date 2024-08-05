@@ -5,7 +5,6 @@ import ru.otus.order_processing.dto.TariffDto;
 import ru.otus.order_processing.model.Tariff;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TariffService {
 

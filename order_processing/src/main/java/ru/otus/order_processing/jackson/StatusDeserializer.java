@@ -16,8 +16,9 @@ public class StatusDeserializer extends StdDeserializer<OrderStatus> {
 
     @Override
     public OrderStatus deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        final String fieldName = "name";
         JsonNode node = p.getCodec().readTree(p);
-        String name = node.get(StatusSerializer.FIELD_NAME).asText();
+        String name = node.get(fieldName).asText();
         return OrderStatus.valueOf(name);
     }
 }

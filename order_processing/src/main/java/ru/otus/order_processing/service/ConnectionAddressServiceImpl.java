@@ -21,9 +21,9 @@ public class ConnectionAddressServiceImpl implements ConnectionAddressService {
     @Transactional
     public ConnectionAddress save(ConnectionAddressDto connectionAddressDto) {
         Optional<ConnectionAddress> existedAddress = connectionAddressRepository
-                .findByCityAndStreetAndHouseAndBuildingAndStructure(connectionAddressDto.city(),
+                .findByCityAndStreetAndHouseAndBuildingAndStructureAndApartment(connectionAddressDto.city(),
                         connectionAddressDto.street(), connectionAddressDto.house(), connectionAddressDto.building(),
-                        connectionAddressDto.structure());
+                        connectionAddressDto.structure(), connectionAddressDto.apartment());
         ConnectionAddress savedConnectionAddress;
         if (existedAddress.isEmpty()) {
             ConnectionAddress connectionAddress = connectionAddressMapper.dtoToAddress(connectionAddressDto);

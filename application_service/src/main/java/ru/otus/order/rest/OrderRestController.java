@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.order.dto.OrderDto;
-import ru.otus.order.kafka.KafkaProducer;
 import ru.otus.order.service.AllowedAddressService;
 import ru.otus.order.service.ConnectionAddressService;
 import ru.otus.order.service.OrderService;

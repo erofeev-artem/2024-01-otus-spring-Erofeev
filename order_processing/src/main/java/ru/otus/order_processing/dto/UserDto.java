@@ -1,6 +1,6 @@
 package ru.otus.order_processing.dto;
 
-public record EngineerDto(
+public record UserDto(
         long id,
 
         String firstName,
