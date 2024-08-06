@@ -1,0 +1,32 @@
+application:
+  kafka:
+    topic: orders
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name:
+      application-service
+
+  kafka:
+    producer:
+      bootstrap-servers: "127.0.0.1:9092"
+      client-id: "order-producer"
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    url: jdbc:postgresql://localhost:5432/internet_app_service
+    user: admin
+    password: password
+
+  datasource:
+   url: jdbc:postgresql://localhost:5432/internet_app_service
+   username: admin
+   password: password
+

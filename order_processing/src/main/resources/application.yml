@@ -1,0 +1,40 @@
+application:
+  kafka:
+    topic: orders
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name:
+      order_processing
+
+  kafka:
+    consumer:
+      group-id: "test-group"
+      bootstrap-servers: "localhost:9092"
+      client-id: "order-consumer"
+      auto-offset-reset: earliest
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    url: jdbc:postgresql://localhost:5432/order_processing
+    user: admin
+    password: password
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/order_processing
+    username: admin
+    password: password
+    hikari:
+      data-source-properties:
+        stringtype: unspecified
+
+
+
+
