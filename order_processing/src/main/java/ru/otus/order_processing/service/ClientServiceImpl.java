@@ -7,7 +7,6 @@ import ru.otus.order_processing.mapper.ClientMapper;
 import ru.otus.order_processing.model.Client;
 import ru.otus.order_processing.repository.ClientRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,10 +16,6 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     private final ClientMapper clientMapper;
-
-    public List<Client> findAll() {
-        return clientRepository.findAll();
-    }
 
 
     public Client save(Client client) {

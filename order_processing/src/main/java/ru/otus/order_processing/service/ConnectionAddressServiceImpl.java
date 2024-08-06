@@ -24,6 +24,7 @@ public class ConnectionAddressServiceImpl implements ConnectionAddressService {
                 .findByCityAndStreetAndHouseAndBuildingAndStructureAndApartment(connectionAddressDto.city(),
                         connectionAddressDto.street(), connectionAddressDto.house(), connectionAddressDto.building(),
                         connectionAddressDto.structure(), connectionAddressDto.apartment());
+
         ConnectionAddress savedConnectionAddress;
         if (existedAddress.isEmpty()) {
             ConnectionAddress connectionAddress = connectionAddressMapper.dtoToAddress(connectionAddressDto);

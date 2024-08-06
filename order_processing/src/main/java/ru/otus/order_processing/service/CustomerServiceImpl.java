@@ -3,7 +3,6 @@ package ru.otus.order_processing.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.order_processing.dto.CustomerDto;
-import ru.otus.order_processing.exception.EntityNotFoundException;
 import ru.otus.order_processing.mapper.CustomerMapper;
 import ru.otus.order_processing.model.Customer;
 import ru.otus.order_processing.repository.CustomerRepository;
@@ -30,11 +29,5 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setLastName(customerDto.lastName());
         }
         return customerRepository.save(customer);
-    }
-
-    @Override
-    public Customer findByPhoneNumber(String phoneNumber) {
-        return customerRepository.findByPhoneNumber(phoneNumber).orElseThrow(()
-                -> new EntityNotFoundException("Customer with phone number %s not found".formatted(phoneNumber)));
     }
 }

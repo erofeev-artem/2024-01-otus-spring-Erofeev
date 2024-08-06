@@ -62,6 +62,7 @@ public class OrderRestController {
         return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
 
+//    Метод для Оператора, с возможностью изменения всей информации по заявке
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody OrderDto orderDto) {
         orderService.saveOrder(orderDto);
@@ -69,6 +70,7 @@ public class OrderRestController {
                 .build();
     }
 
+//    Метод для Инженера с возможностью частичного изменения заявки
     @PostMapping("/update")
     public ResponseEntity<OrderDto> update(@RequestBody EngineerOrderUpdateDto updateDto) {
         OrderDto orderDto = orderService.update(updateDto);
